@@ -25,6 +25,7 @@ Operating manual for coding agents in this repository. Codex and Copilot read th
 | Install | `pnpm install` |
 | Dev server | `pnpm dev` |
 | Unit and property tests | `pnpm test` (with the coverage gate; one file: `pnpm exec vitest run <file>`) |
+| Long property run / replay a failure | `FC_NUM_RUNS=10000 pnpm test` / `FC_SEED=<seed> pnpm test` |
 | Lint and format | `pnpm lint` / `pnpm format` |
 | Typecheck | `pnpm typecheck` |
 | Shader compile check | `pnpm shaders:check` (compiles, links and draws every program in headless WebGL2) |

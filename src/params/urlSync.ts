@@ -17,3 +17,10 @@ export function syncToUrl(store: ParamsStore, write: (query: string) => void, de
     unsubscribe();
   };
 }
+
+/** `href` (path, query and hash) with its query replaced by `query`. */
+export function withQuery(href: string, query: string): string {
+  const url = new URL(href, "http://x");
+  url.search = query;
+  return `${url.pathname}${url.search}${url.hash}`;
+}

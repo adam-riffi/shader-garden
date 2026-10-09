@@ -4,6 +4,9 @@ import type { UniformInput } from "../engine/uniforms";
 /** An index on a numeric step grid fits a 3-byte varint in the URL codec. */
 export const MAX_STEPS = 65_535;
 const MAX_PARAMS = 16;
+const MAX_DECIMALS = 6;
+/** Keeps `/s/<name>?<query>` under 200 characters (property P2). */
+const MAX_NAME_LENGTH = 32;
 
 const identifier = z.string().regex(/^[a-z][a-zA-Z0-9]*$/, "use a camelCase identifier");
 const common = {
@@ -34,6 +37,14 @@ function numeric<T extends "float" | "int">(type: T, value: z.ZodNumber) {
       if (stepCount(p) > MAX_STEPS) {
         ctx.addIssue({ code: "custom", message: `at most ${MAX_STEPS} steps` });
       }
+      if (Math.max(decimals(p.min), decimals(p.step)) > MAX_DECIMALS) {
+        ctx.addIssue({
+          code: "custom",
+          message: `min and step take at most ${MAX_DECIMALS} decimals`,
+        });
+      } else if (fromIndex(p, stepCount(p)) !== p.max) {
+        ctx.addIssue({ code: "custom", message: "max must lie on the step grid" });
+      }
     });
 }
 
@@ -50,7 +61,10 @@ const paramSchema = z.discriminatedUnion("type", [
 
 const metaSchema = z
   .object({
-    name: z.string().regex(/^[a-z][a-z0-9-]*$/),
+    name: z
+      .string()
+      .max(MAX_NAME_LENGTH)
+      .regex(/^[a-z][a-z0-9-]*$/),
     title: z.string().min(1),
     params: z.array(paramSchema).max(MAX_PARAMS),
     presets: z.record(
@@ -64,9 +78,18 @@ const metaSchema = z
       ctx.addIssue({ code: "custom", message: "param names must be unique" });
     }
     for (const [preset, values] of Object.entries(meta.presets)) {
-      for (const key of Object.keys(values)) {
-        if (!names.has(key)) {
+      for (const [key, value] of Object.entries(values)) {
+        const param = meta.params.find((p) => p.name === key);
+        if (!param) {
           ctx.addIssue({ code: "custom", message: `preset ${preset} sets unknown param ${key}` });
+        } else if (
+          quantizeOne(param, value) !==
+          (param.type === "color" ? String(value).toLowerCase() : value)
+        ) {
+          ctx.addIssue({
+            code: "custom",
+            message: `preset ${preset} sets ${key} off its type, range or grid`,
+          });
         }
       }
     }
@@ -94,7 +117,7 @@ function decimals(x: number): number {
 }
 
 /** Grid value at `index`, rounded to the step's precision so 0.1 * 3 reads 0.3. */
-export function fromIndex(p: NumericParam, index: number): number {
+export function fromIndex(p: { min: number; step: number }, index: number): number {
   const digits = Math.max(decimals(p.min), decimals(p.step));
   return Number((p.min + index * p.step).toFixed(digits));
 }
