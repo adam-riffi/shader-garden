@@ -59,6 +59,7 @@ jobs:
         with: { node-version-file: .nvmrc, cache: pnpm }
       - run: pnpm install --frozen-lockfile
       - run: pnpm exec playwright install --with-deps chromium
+      - run: pnpm shaders:check
       - run: pnpm build
       - run: pnpm e2e
       - if: failure()
