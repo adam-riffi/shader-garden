@@ -12,6 +12,12 @@ Entry format:
 
 ---
 
+## 2026-10-09 · claude · stack/m2/05-nightly · #12
+- Done: `.github/workflows/nightly.yml` (daily at 03:17 UTC and on demand): `pnpm test` with `FC_NUM_RUNS=10000`, plus `pnpm audit`. Not a required check. The commands table in AGENTS.md documents `FC_NUM_RUNS` and `FC_SEED`. End-of-session HANDOFF.
+- Tests: the full suite passes locally at 10,000 cases per property (1.4 s); `pnpm audit` is clean; `actionlint` is clean.
+- Scope/decisions: none.
+- Next: M3 shaders, one PR per shader, starting in plan mode.
+
 ## 2026-10-09 · claude · stack/m2/04-store-url · #11
 - Done: `src/params/store.ts` (vanilla zustand store hydrated from the link: `set`, `randomize`, `applyPreset`, all quantized), `src/params/urlSync.ts` (150 ms debounce, then `history.replaceState`), `src/ui/ParamControls.tsx` (native range, checkbox and colour inputs generated from metadata), and a notice for `unknown-version` and `invalid` links, all wired into the engine demo.
 - Tests: `test/params/store.test.ts` (hydration, quantized writes, randomize, presets, debounce, unsubscribe) and `e2e/params.spec.ts` (slider to URL in under 250 ms measured in the page; shared URL restores values; newer-version notice), committed red first. 30/30 passed with `--repeat-each 10` and parallel workers.
