@@ -10,6 +10,8 @@ test.describe("golden screenshots (seed 1, t = 2 s, 512x512)", () => {
   // DESIGN.md section 14: goldens are SwiftShader renders from CI's Linux runner only.
   test.skip(process.platform !== "linux", "goldens are rendered on CI's Linux runner");
   test.use({ viewport: { width: 512, height: 512 } });
+  // Simulations replay 960 steps on a software GPU before their frame.
+  test.setTimeout(120_000);
 
   for (const name of names) {
     test(name, async ({ page }) => {

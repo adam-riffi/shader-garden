@@ -3,6 +3,7 @@ import { useEffect, useMemo, useRef } from "react";
 import { GLSL3, RawShaderMaterial, Vector2 } from "three";
 import fullscreenVertex from "../shaders/common/fullscreen.vert.glsl";
 import type { Clock } from "./clock";
+import { SimulationPlane, type SimulationSpec } from "./SimulationPlane";
 import { bindUniforms, createUniforms, type UniformInput } from "./uniforms";
 
 export interface ShaderViewProps {
@@ -17,6 +18,10 @@ export interface ShaderViewProps {
   capture?: boolean;
   /** Capture mode: called once the first frame is drawn and the GPU has finished it. */
   onCaptureReady?: () => void;
+  /** Present for stateful shaders: `fragmentShader` is then the display pass. */
+  simulation?: SimulationSpec | undefined;
+  /** Changing it reseeds a simulation. */
+  reseed?: number;
 }
 
 /** Renders a fragment shader over the whole canvas, with time taken from `clock`. */
@@ -24,6 +29,8 @@ export function ShaderView({
   className,
   capture = false,
   onCaptureReady,
+  simulation,
+  reseed = 0,
   ...plane
 }: ShaderViewProps) {
   return (
@@ -33,7 +40,11 @@ export function ShaderView({
       frameloop={capture ? "demand" : "always"}
       gl={{ antialias: false }}
     >
-      <ShaderPlane {...plane} />
+      {simulation ? (
+        <SimulationPlane {...plane} simulation={simulation} reseed={reseed} capture={capture} />
+      ) : (
+        <ShaderPlane {...plane} />
+      )}
       {capture && <CaptureFrame onReady={onCaptureReady} />}
     </Canvas>
   );
@@ -44,7 +55,7 @@ function ShaderPlane({
   vertexShader = fullscreenVertex,
   uniforms = {},
   clock,
-}: Omit<ShaderViewProps, "className" | "capture" | "onCaptureReady">) {
+}: Omit<ShaderViewProps, "className" | "capture" | "onCaptureReady" | "simulation" | "reseed">) {
   // Values are bound in place below; only a new shader or a new set of uniform names rebuilds.
   const names = Object.keys(uniforms).sort().join();
   // biome-ignore lint/correctness/useExhaustiveDependencies: `names` stands in for `uniforms`.

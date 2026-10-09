@@ -1,6 +1,7 @@
 import {
   type Camera,
   HalfFloatType,
+  type Mesh,
   type Object3D,
   RawShaderMaterial,
   type Texture,
@@ -64,6 +65,33 @@ describe("PingPong", () => {
       { into: b, read: a.texture },
     ]);
     expect(pp.texture).toBe(b.texture);
+  });
+
+  it("fills both targets with a seed material, then steps with the simulation again", () => {
+    const material = simMaterial();
+    const seed = new RawShaderMaterial();
+    const pp = new PingPong(material);
+    const used: { into: WebGLRenderTarget | null; material: unknown }[] = [];
+    let target: WebGLRenderTarget | null = null;
+    const renderer: PassRenderer = {
+      getRenderTarget: () => target,
+      setRenderTarget: (next) => {
+        target = next;
+      },
+      render: (scene) => {
+        used.push({ into: target, material: (scene.children[0] as Mesh).material });
+      },
+    };
+
+    pp.fill(renderer, seed);
+    pp.step(renderer);
+
+    expect(used).toEqual([
+      { into: pp.write, material: seed },
+      { into: pp.read, material: seed },
+      { into: pp.read, material },
+    ]);
+    expect(target).toBeNull();
   });
 
   it("restores the render target that was active before stepping", () => {
