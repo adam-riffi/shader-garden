@@ -12,6 +12,12 @@ Entry format:
 
 ---
 
+## 2026-10-09 · claude · stack/m3/05-mandelbulb · #17
+- Done: Mandelbulb: power-n distance estimator (2–12, 8 iterations, orbit trap), up to 128 sphere-tracing steps inside a bounding sphere, soft shadows, occlusion from the step count, a halo for grazing rays, and an orbiting camera. Params: power, spin, glow, core, rim. Presets: Classic (8), Bloom (4.5), Spiky (11.5). Capture mode now renders its frame itself and reads a pixel back before setting `html[data-capture-ready]`; the goldens wait for it.
+- Tests: `test/shaders/mandelbulb.test.ts` (gallery, power 2–12 default 8, presets) and `e2e/capture.spec.ts` (capture-ready set in capture mode only), committed red first; `shaders:check` passes; golden from CI.
+- Scope/decisions: `common/sdf.glsl` and `palette.glsl` are not added; no shader needs them yet. A first render showed a full-frame halo because missed rays counted as 128 steps; fixed by counting real steps.
+- Next: Bloom with `SimulationView` (#18).
+
 ## 2026-10-09 · claude · stack/m3/04-moire · #16
 - Done: Moiré: up to four moving ring sources plus an optional static-and-rotating line pair. Each sheet's transmission (from cos, anti-aliased with `fwidth`) multiplies, so beat fringes emerge. Params: density (lines per screen height), ring sources, line gratings, rotation, line width, colour. Presets: Rings, Grid, Drift.
 - Tests: `test/shaders/moire.test.ts` (gallery and title, ring sources 0–4, presets), committed red first; `shaders:check` passes; golden from CI.
