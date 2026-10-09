@@ -12,6 +12,12 @@ Entry format:
 
 ---
 
+## 2026-10-09 · claude · stack/m3/03-aurora · #15
+- Done: Aurora: up to six layered curtains whose lower edges wander with fBm, a long glow above, a soft fade below and a bright fringe at the edge, vertical rays from value noise, a twinkling star field, and a soft exponential tone map. Params: layers, intensity, speed, drift, lower and upper glow. Presets: Polar, Solar storm.
+- Tests: `test/shaders/aurora.test.ts` (gallery, layers 1–6, presets), committed red first; `shaders:check` passes; golden from CI.
+- Scope/decisions: tuned by eye. A sharp lower edge read as mountain ridges, so the edges got a fringe and a softer fade below.
+- Next: Moiré (#16).
+
 ## 2026-10-09 · claude · stack/m3/02-terrain · #14
 - Done: `common/noise.glsl` (integer hash, value noise, 2D simplex, rotated-octave fBm, written for this project) and Terrain: smooth 3-octave warp fields fold a detailed fBm height field, lit by finite-difference hillshade, with optional anti-aliased contours. Params: warp, scale, octaves, contours, lowland, peaks. Presets: Highlands, Dunes, Archipelago.
 - Tests: `test/shaders/terrain.test.ts` (gallery entry, warp and octave params, presets), committed red first; `shaders:check` passes; golden from CI.
