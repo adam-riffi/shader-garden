@@ -7,7 +7,12 @@ export default defineConfig({
   testDir: "e2e",
   forbidOnly: !!process.env.CI,
   reporter: process.env.CI ? [["list"], ["html", { open: "never" }]] : "list",
-  use: { baseURL, trace: "retain-on-failure" },
+  use: {
+    baseURL,
+    trace: "retain-on-failure",
+    // Software WebGL2 (SwiftShader), so rendering matches across machines and CI has no GPU.
+    launchOptions: { args: ["--use-angle=swiftshader", "--enable-unsafe-swiftshader"] },
+  },
   projects: [{ name: "chromium", use: { ...devices["Desktop Chrome"] } }],
   ...(process.env.BASE_URL
     ? {}

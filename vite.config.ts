@@ -1,8 +1,9 @@
 import react from "@vitejs/plugin-react";
+import glsl from "vite-plugin-glsl";
 import { defineConfig } from "vitest/config";
 
 export default defineConfig({
-  plugins: [react()],
+  plugins: [react(), glsl()],
   test: {
     include: ["test/**/*.test.{ts,tsx}"],
     coverage: {
