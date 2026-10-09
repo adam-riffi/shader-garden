@@ -33,6 +33,7 @@ export class PingPong {
   private readonly scene = new Scene();
   private readonly camera = new OrthographicCamera(-1, 1, 1, -1, 0, 1);
   private readonly quad = new PlaneGeometry(2, 2);
+  private readonly mesh: Mesh;
 
   constructor(
     private readonly material: RawShaderMaterial,
@@ -48,9 +49,9 @@ export class PingPong {
       new WebGLRenderTarget(size, size, { type: HalfFloatType, depthBuffer: false });
     this.read = target();
     this.write = target();
-    const mesh = new Mesh(this.quad, material);
-    mesh.frustumCulled = false;
-    this.scene.add(mesh);
+    this.mesh = new Mesh(this.quad, material);
+    this.mesh.frustumCulled = false;
+    this.scene.add(this.mesh);
   }
 
   /** The latest simulation state. */
@@ -72,6 +73,18 @@ export class PingPong {
       renderer.render(this.scene, this.camera);
       this.swap();
     }
+    renderer.setRenderTarget(previous);
+  }
+
+  /** Draws `seed` (an initial state) into both targets, then restores the renderer's target. */
+  fill(renderer: PassRenderer, seed: RawShaderMaterial): void {
+    const previous = renderer.getRenderTarget();
+    this.mesh.material = seed;
+    for (const target of [this.read, this.write]) {
+      renderer.setRenderTarget(target);
+      renderer.render(this.scene, this.camera);
+    }
+    this.mesh.material = this.material;
     renderer.setRenderTarget(previous);
   }
 

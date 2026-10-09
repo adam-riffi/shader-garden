@@ -30,7 +30,8 @@ export default function ShaderPage() {
 }
 
 function ShaderScreen({ entry }: { entry: ShaderEntry }) {
-  const { meta, fragment } = entry;
+  const { meta, fragment, simulation } = entry;
+  const [reseed, setReseed] = useState(0);
   const [frozenAt] = useState(() => captureTime(window.location.search));
   const capture = frozenAt !== undefined;
   const [clock] = useState(() => createClock(capture ? { time: frozenAt, paused: true } : {}));
@@ -56,6 +57,7 @@ function ShaderScreen({ entry }: { entry: ShaderEntry }) {
           fragmentShader={fragment}
           uniforms={uniforms}
           clock={clock}
+          simulation={simulation}
           capture
           onCaptureReady={() => {
             document.documentElement.dataset.captureReady = "true";
@@ -70,8 +72,19 @@ function ShaderScreen({ entry }: { entry: ShaderEntry }) {
       <h2>{meta.title}</h2>
       {notice && <p role="status">{notice}</p>}
       <div style={{ height: "60vh" }}>
-        <ShaderView fragmentShader={fragment} uniforms={uniforms} clock={clock} />
+        <ShaderView
+          fragmentShader={fragment}
+          uniforms={uniforms}
+          clock={clock}
+          simulation={simulation}
+          reseed={reseed}
+        />
       </div>
+      {simulation && (
+        <button type="button" onClick={() => setReseed((count) => count + 1)}>
+          Seed
+        </button>
+      )}
       <ParamControls store={store} />
     </>
   );
