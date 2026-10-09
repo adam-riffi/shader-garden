@@ -25,7 +25,7 @@ float bulb(vec3 position, out float trap) {
   float r = 0.0;
   trap = 1e9;
   for (int i = 0; i < ITERATIONS; i++) {
-    r = length(z);
+    r = max(length(z), 1e-6); // Keeps acos(z.z / r) finite at the origin.
     if (r > 2.0) break;
     float theta = acos(clamp(z.z / r, -1.0, 1.0)) * uPower;
     float phi = atan(z.y, z.x) * uPower;

@@ -6,6 +6,7 @@ import {
   OrthographicCamera,
   PlaneGeometry,
   type RawShaderMaterial,
+  RepeatWrapping,
   Scene,
   type Texture,
   WebGLRenderTarget,
@@ -46,7 +47,13 @@ export class PingPong {
       throw new UniformBindingError(`Simulation material lacks the "${stateUniform}" uniform`);
     }
     const target = () =>
-      new WebGLRenderTarget(size, size, { type: HalfFloatType, depthBuffer: false });
+      new WebGLRenderTarget(size, size, {
+        type: HalfFloatType,
+        depthBuffer: false,
+        // A torus: patterns and dye leaving one edge come back on the other, with no border artifacts.
+        wrapS: RepeatWrapping,
+        wrapT: RepeatWrapping,
+      });
     this.read = target();
     this.write = target();
     this.mesh = new Mesh(this.quad, material);

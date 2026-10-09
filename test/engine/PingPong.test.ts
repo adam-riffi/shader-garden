@@ -4,6 +4,7 @@ import {
   type Mesh,
   type Object3D,
   RawShaderMaterial,
+  RepeatWrapping,
   type Texture,
   type WebGLRenderer,
   WebGLRenderTarget,
@@ -41,6 +42,14 @@ describe("PingPong", () => {
       expect(target.width).toBe(256);
       expect(target.height).toBe(256);
       expect(target.texture.type).toBe(HalfFloatType);
+    }
+  });
+
+  it("wraps its state around the edges, so the simulation domain is a torus", () => {
+    const pp = new PingPong(simMaterial(), 64);
+    for (const target of [pp.read, pp.write]) {
+      expect(target.texture.wrapS).toBe(RepeatWrapping);
+      expect(target.texture.wrapT).toBe(RepeatWrapping);
     }
   });
 

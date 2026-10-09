@@ -1,31 +1,40 @@
 # Handoff — 2026-10-09 · claude
 
 ## State
-- `main` includes M0 (#1, #2), M1 (#3–#7) and M2 (#8–#12); this file ships with #12, the last PR merged this session. CI green on every merge.
-- Production: https://shader-garden-weld.vercel.app (Vercel's alias; `shader-garden.vercel.app` belongs to an unrelated project). It shows the title, the test shader with generated controls (Rings, Speed, Tint, Invert), a shareable `?v=1&s=&p=` URL, and the frame meter on `F`.
+- `main` includes M0 (#1, #2), M1 (#3–#7), M2 (#8–#12) and M3 (#13–#19); this file ships with #19, the last PR merged this session. CI green on every merge.
+- Production: https://shader-garden-weld.vercel.app (Vercel's alias; `shader-garden.vercel.app` belongs to an unrelated project). `/` lists six shaders; `/s/<name>` shows one with generated controls and a shareable `?v=1&s=&p=` URL; `?t=<s>` is capture mode; `F` toggles the frame meter.
 - Open PRs: none.
+- **Vercel is rate limited** (Hobby cap of 100 deployments per day, hit by this session's restack pushes). Production is still on #14 (`0add410`), and #15–#19 deploy once the limit resets, about 24 hours after 18:50 UTC on 2026-10-09.
 
 ## Done this session
-- Repository and one-time setup (ENGINEERING.md section 16): squash only (PR title and body), head branches deleted on merge, read-only Actions token, `main` ruleset (required `lint typecheck test build e2e`), Dependabot alerts, CodeQL default setup, Vercel project `shader-garden` (team `wuxinggraph`, Vite preset, Git integration, Vercel Authentication off).
-- M0 scaffold (#1, #2). M1 engine (#3–#7): clock, uniforms and `ShaderView`, `shaders:check`, `PingPong`, frame meter.
-- M2 params (#8–#12): zod schema and quantization, mulberry32 `randomize` (P3), versioned codec (P1, P2, golden `v=1&s=1&p=HBR88qQA`), zustand store with URL sync (150 ms debounce), generated native controls, `nightly.yml` (10,000-case properties and `pnpm audit`).
+- Setup (ENGINEERING.md section 16), M0 scaffold, M1 engine, M2 params: see `docs/AGENT_LOG.md`.
+- M3 shaders:
+  - #13: registry, react-router routes, capture mode, golden harness.
+  - #14–#17: Terrain (with `common/noise.glsl`), Aurora, Moiré, Mandelbulb.
+  - #18–#19: Bloom (Gray-Scott, `SimulationPlane`) and Ink (curl-noise advection).
+  - All with presets and goldens.
 
 ## Verified
-- Production smoke passed after M0 and M1 (latest: [run](https://github.com/adam-riffi/shader-garden/actions/runs/37957676361)); `curl` shows the CSP, Referrer-Policy and nosniff headers.
-- Properties pass at 10,000 cases locally. The 250 ms URL e2e test passed 30/30 under `--repeat-each 10` with parallel workers.
-- Independent reviews (code-review skill) were posted on #1, #2, #3, #7, #8 and #12; their findings are fixed or deferred with reasons.
+- Goldens (seed 1, t = 2 s, 512×512, 1% tolerance) pass on CI's Linux SwiftShader for all six shaders plus the test pattern. Bloom's 960-step replay takes about 40 s there; the golden timeout is 120 s.
+- `shaders:check`: 11 of 11 programs. Properties pass at 10,000 cases (nightly green).
+- Independent reviews (code-review skill) were posted on #1, #2, #3, #7, #8, #12, #13 and #19.
 
 ## Next
-1. Trigger `nightly` once on GitHub (`gh workflow run nightly`) and check that it passes.
-2. M3 shaders (DESIGN.md section 9): one PR per shader with `meta.ts` and presets (Terrain, Mandelbulb, Bloom, Ink, Aurora, Moiré); golden screenshots at seed 1 and t = 2 s. Start in plan mode. Bloom and Ink need `PingPong` seeding and readback and a display pass; `common/noise.glsl`, `sdf.glsl` and `palette.glsl` come in through vite-plugin-glsl `#include`.
+1. After the Vercel limit resets, redeploy `main` (any push to `main`, or Redeploy on the latest production deployment in Vercel), then check that `/s/<name>` loads for all six shaders on production and that smoke passes.
+2. M4 UI and identity (DESIGN.md section 9): gallery grid with live 256 px thumbnails (one shared offscreen renderer, 15 fps, IntersectionObserver), a styled glass controls panel (presets, Randomize, Copy link), a shiki source viewer, the night-garden theme (IBM Plex Mono, Instrument Serif), keyboard `R`, `Space` and `S`, journeys J1–J3, and Lighthouse accessibility of 90 or more. Start in plan mode.
 
 ## Needs from Georges
-- Nothing blocking. Optional: a nicer Vercel production alias than `shader-garden-weld.vercel.app`, then an ADR updating DESIGN.md sections 12 and 14.
+- Nothing blocking. Optional: a nicer production alias than `shader-garden-weld.vercel.app`, then an ADR updating DESIGN.md sections 12 and 14.
 
 ## Notes
-- Deferred review items: zod at runtime, about 25 KB gzipped in the lazy chunk (M5: `zod/mini` or validate in tests only); Playwright browser cache in CI (M4); a production-alias check in `smoke.yml` (M7); uniform-type messages in `shaders:check` (M3 if they mislead).
-- The URL wire format is locked by the golden test: reordering or removing params needs codec `VERSION` 2. Appending params is backwards compatible.
-- Metadata rules (schema-enforced): names at most 32 characters; at most 16 params; `max` on the step grid; at most 6 decimals; presets on type, range and grid.
-- e2e timing: measure app latency in the page, not with Playwright timeouts. Listeners that tests rely on attach in layout effects or after the heading renders.
-- pnpm 12 enforces a one-day minimum release age; pin the previous version rather than adding `minimumReleaseAgeExclude`.
+- **Goldens:** generated only on CI (`test.skip` off Linux). To add or refresh one, delete the PNG (or add a shader), push, download the `golden-screenshots` artifact, check it by eye, and commit it. A newer push to the same branch cancels the running CI (concurrency group).
+- **Capture mode** sets `html[data-capture-ready]` after the frame is drawn and read back. The M6 capture script should wait for it.
+- **Simulations:** state wraps (a torus). Step passes get `uSimTime` and `uStepDt`. Ink takes 2 steps per frame (advection blurs per step); Bloom takes 8, as DESIGN says.
+- **Deferred:**
+  - M4: Home loads every GLSL source; Playwright browser cache in CI.
+  - M5: `uSimTime` float precision in long sessions; zod at runtime; Mandelbulb and Terrain cost at 1080p; the `RGBA16F` fallback (DESIGN.md section 14).
+  - M7: a production-alias check in `smoke.yml`.
+- **Metadata rules (schema-enforced):** names at most 32 characters; at most 16 params; `max` on the step grid; at most 6 decimals; presets on type, range and grid. The URL wire format is locked by the codec golden.
+- **Vercel budget:** every push to a PR branch is a preview deployment, and a restack pushes the whole stack, so a 7-PR stack restacked 7 times costs about 50 deployments. Restack less often (merge in bigger batches) or skip previews for golden-only commits.
+- **Pitfall:** Python `str.replace` edits silently miss lines that Biome has rewrapped. Re-read the file, or use the Edit tool.
 - `actionlint` is in `~/go/bin`. On Windows, stop a stray `vite preview` by port (`netstat -ano`, `taskkill //PID … //F`).
