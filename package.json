@@ -15,7 +15,8 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run --coverage",
     "e2e": "playwright test",
-    "check": "pnpm lint && pnpm typecheck && pnpm test && pnpm build && pnpm e2e"
+    "shaders:check": "node scripts/shaders-check.ts",
+    "check": "pnpm lint && pnpm typecheck && pnpm test && pnpm shaders:check && pnpm build && pnpm e2e"
   },
   "dependencies": {
     "@react-three/fiber": "9.8.1",

@@ -27,11 +27,11 @@ Operating manual for coding agents in this repository. Codex and Copilot read th
 | Unit and property tests | `pnpm test` (with the coverage gate; one file: `pnpm exec vitest run <file>`) |
 | Lint and format | `pnpm lint` / `pnpm format` |
 | Typecheck | `pnpm typecheck` |
-| Shader compile check | `pnpm shaders:check` (added in M1) |
+| Shader compile check | `pnpm shaders:check` (compiles, links and draws every program in headless WebGL2) |
 | Build | `pnpm build` |
 | End-to-end tests | `pnpm e2e` (first run: `pnpm exec playwright install chromium`; `BASE_URL=<url>` targets a deployment) |
 | Record demo video | `pnpm capture -- --url <url>` (added in M6) |
-| Check all | `pnpm check` (lint, typecheck, test, build, e2e) |
+| Check all | `pnpm check` (lint, typecheck, test, shaders:check, build, e2e) |
 
 Keep this table accurate: when you add or change a script, update the table in the same PR.
 

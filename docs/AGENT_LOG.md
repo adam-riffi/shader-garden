@@ -12,6 +12,12 @@ Entry format:
 
 ---
 
+## 2026-10-09 · claude · stack/m1/03-shaders-check · #5
+- Done: `pnpm shaders:check` (`scripts/shaders-check.ts`): Vite's SSR loader resolves every `.glsl` through vite-plugin-glsl, and headless Chromium (SwiftShader WebGL2) compiles, links and draws each program, failing on errors, info-log warnings or GL errors. `src/shaders/programs.ts` pairs `<name>.frag.glsl` with `<name>.vert.glsl` or the shared full-screen vertex shader. The script runs in the CI `e2e` job and in `pnpm check`.
+- Tests: `test/shaders/programs.test.ts` (pairing, missing vertex shader, real glob), committed red first. Checked by hand that a broken shader makes the script exit 1.
+- Scope/decisions: none. This meets the M1 acceptance criterion "a test shader renders in `shaders:check`".
+- Next: `PingPong` (#6).
+
 ## 2026-10-09 · claude · stack/m1/02-shader-view · #4
 - Done: `createUniforms`/`bindUniforms` (`src/engine/uniforms.ts`, in-place updates, typed `UniformBindingError`); `ShaderView` (R3F canvas, full-screen `RawShaderMaterial` in GLSL3, `uTime` from the clock, `uResolution` from the drawing buffer); `common/fullscreen.vert.glsl` and a `test` fragment shader; lazy engine demo on `/`; favicon.
 - Tests: `test/engine/uniforms.test.ts` (5 cases) and `e2e/shader-view.spec.ts` (canvas animates, no console errors), both committed red first.
