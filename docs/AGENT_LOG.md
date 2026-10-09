@@ -12,6 +12,12 @@ Entry format:
 
 ---
 
+## 2026-10-09 · claude · stack/m1/05-frame-meter · #7
+- Done: `createFrameStats` (`src/engine/frameStats.ts`, rolling window, nearest-rank p95) and `FrameMeter` (requestAnimationFrame sampling, refreshed every 500 ms, `F` toggles it; ignored while typing or with modifier keys), mounted in `App`.
+- Tests: `test/engine/frameStats.test.ts` (percentile, window, empty) and `e2e/frame-meter.spec.ts` (F shows `p95 N.N ms`, F hides it), committed red first. The e2e test waits for the heading before pressing F: the listener attaches in a passive effect, after `load`.
+- Scope/decisions: the meter measures page frames, not only the R3F loop, so it also covers thumbnails later. Its styling is provisional until the M4 theme.
+- Next: M2 params (schema, codec, seeded random, store, URL sync), starting in plan mode.
+
 ## 2026-10-09 · claude · stack/m1/04-ping-pong · #6
 - Done: `PingPong` (`src/engine/PingPong.ts`): two half-float (RGBA16F) targets, at most 512 px (DESIGN.md section 13). Each step binds the previous state to `uState`, draws the simulation material into the other target and swaps; the previous render target is restored afterwards. `dispose` frees the targets and the quad, while the material stays the caller's.
 - Tests: `test/engine/PingPong.test.ts` (allocation, swap, pass order with a recording renderer, target restore, size budget, missing uniform, dispose), committed red first; a later compile-time check confirms `WebGLRenderer` satisfies `PassRenderer`.

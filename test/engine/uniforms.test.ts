@@ -48,4 +48,10 @@ describe("bindUniforms", () => {
     expect(() => bindUniforms(u, { uVec: [1, 2, 3] })).toThrow(UniformBindingError);
     expect(() => bindUniforms(u, { uVec: 1 })).toThrow(UniformBindingError);
   });
+
+  it("rejects a boolean for a number uniform and the reverse", () => {
+    const u = createUniforms({ uFloat: 1, uFlag: false });
+    expect(() => bindUniforms(u, { uFloat: true })).toThrow(UniformBindingError);
+    expect(() => bindUniforms(u, { uFlag: 1 })).toThrow(UniformBindingError);
+  });
 });

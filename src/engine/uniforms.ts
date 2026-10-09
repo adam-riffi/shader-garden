@@ -41,6 +41,9 @@ export function bindUniforms(uniforms: Uniforms, values: Record<string, UniformI
       current instanceof Vector2 || current instanceof Vector3 || current instanceof Vector4;
     if (typeof input !== "object") {
       if (isVector) throw new UniformBindingError(`Uniform "${name}" expects a vector`);
+      if (typeof input !== typeof current) {
+        throw new UniformBindingError(`Uniform "${name}" expects a ${typeof current}`);
+      }
       uniform.value = input;
     } else if (isVector && input.length === current.toArray().length) {
       current.fromArray(input);
