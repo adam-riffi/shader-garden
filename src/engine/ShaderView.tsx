@@ -13,12 +13,19 @@ export interface ShaderViewProps {
   uniforms?: Record<string, UniformInput>;
   clock: Clock;
   className?: string;
+  /** Capture mode: device pixel ratio 1 and render only when something changes. */
+  capture?: boolean;
 }
 
 /** Renders a fragment shader over the whole canvas, with time taken from `clock`. */
-export function ShaderView({ className, ...plane }: ShaderViewProps) {
+export function ShaderView({ className, capture = false, ...plane }: ShaderViewProps) {
   return (
-    <Canvas className={className} dpr={[1, 2]} gl={{ antialias: false }}>
+    <Canvas
+      className={className}
+      dpr={capture ? 1 : [1, 2]}
+      frameloop={capture ? "demand" : "always"}
+      gl={{ antialias: false }}
+    >
       <ShaderPlane {...plane} />
     </Canvas>
   );
@@ -29,7 +36,7 @@ function ShaderPlane({
   vertexShader = fullscreenVertex,
   uniforms = {},
   clock,
-}: Omit<ShaderViewProps, "className">) {
+}: Omit<ShaderViewProps, "className" | "capture">) {
   // Values are bound in place below; only a new shader or a new set of uniform names rebuilds.
   const names = Object.keys(uniforms).sort().join();
   // biome-ignore lint/correctness/useExhaustiveDependencies: `names` stands in for `uniforms`.

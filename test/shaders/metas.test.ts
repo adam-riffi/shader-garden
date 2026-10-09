@@ -19,8 +19,12 @@ describe("shader metadata", () => {
     expect(path).toBe(`/src/shaders/${meta.name}/meta.ts`);
   });
 
-  it.each(Object.entries(metas))("%s declares every uniform in its shader", (_, meta) => {
-    const source = fragments[`/src/shaders/${meta.name}/${meta.name}.frag.glsl`] ?? "";
+  // Simulations keep some params in their step shader, so any fragment in the folder counts.
+  it.each(Object.entries(metas))("%s declares every uniform in its shaders", (_, meta) => {
+    const source = Object.entries(fragments)
+      .filter(([path]) => path.startsWith(`/src/shaders/${meta.name}/`))
+      .map(([, code]) => code)
+      .join("\n");
     for (const param of meta.params) {
       expect(source).toMatch(new RegExp(`uniform\\s+\\w+\\s+${uniformName(param)}\\s*;`));
     }
