@@ -12,6 +12,12 @@ Entry format:
 
 ---
 
+## 2026-10-09 · claude · stack/m2/04-store-url · #11
+- Done: `src/params/store.ts` (vanilla zustand store hydrated from the link: `set`, `randomize`, `applyPreset`, all quantized), `src/params/urlSync.ts` (150 ms debounce, then `history.replaceState`), `src/ui/ParamControls.tsx` (native range, checkbox and colour inputs generated from metadata), and a notice for `unknown-version` and `invalid` links, all wired into the engine demo.
+- Tests: `test/params/store.test.ts` (hydration, quantized writes, randomize, presets, debounce, unsubscribe) and `e2e/params.spec.ts` (slider to URL in under 250 ms measured in the page; shared URL restores values; newer-version notice), committed red first. 30/30 passed with `--repeat-each 10` and parallel workers.
+- Scope/decisions: the minimal native controls are M2's means of meeting its acceptance; M4 styles them and adds presets and Randomize. Value labels are `aria-hidden` spans rather than `<output>`, whose implicit live region would announce every drag step. The sync subscribes in a layout effect to close a race with fast input. The lazy chunk is now 270 KB gzipped (zod, zustand); initial JS is still 70 KB.
+- Next: nightly workflow (#12), then review and merge M2.
+
 ## 2026-10-09 · claude · stack/m2/03-codec · #10
 - Done: `src/params/codec.ts`. `encode` writes `v=1&s=<uint32>&p=<base64url>` (numeric as LEB128 step index, bool 1 byte, colour 3 bytes). `decode` returns `{ seed, values, status }` with `ok | empty | unknown-version | invalid`; a fallback means defaults and seed 1. A truncated `p` defaults trailing params; out-of-grid indexes clamp.
 - Tests: P1 (round trip equals `quantize`), P2 (`/s/<name>?<query>` at most 200 characters), the golden v1 string for the test shader's defaults, and the fallback cases (version, seed, charset, base64 length, long varint, short colour, missing `p`, appended params, clamp). Committed red first; P1 and P2 pass at 10,000 cases; `codec.ts` at 100% lines.
