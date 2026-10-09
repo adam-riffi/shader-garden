@@ -4,7 +4,7 @@ import { createClock } from "../engine/clock";
 import { ShaderView } from "../engine/ShaderView";
 import { toUniforms } from "../params/schema";
 import { createParamsStore } from "../params/store";
-import { syncToUrl } from "../params/urlSync";
+import { syncToUrl, withQuery } from "../params/urlSync";
 import { meta } from "../shaders/test/meta";
 import testShader from "../shaders/test/test.frag.glsl";
 import { ParamControls } from "../ui/ParamControls";
@@ -25,7 +25,7 @@ export default function EngineDemo() {
         window.history.replaceState(
           window.history.state,
           "",
-          `${window.location.pathname}?${query}`,
+          withQuery(window.location.href, query),
         ),
       ),
     [store],

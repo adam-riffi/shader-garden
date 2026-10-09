@@ -7,7 +7,7 @@ export interface ParamsState {
   meta: ShaderMeta;
   seed: number;
   values: ParamValues;
-  /** How the starting link decoded; the UI explains `unknown-version` and `invalid`. */
+  /** How the starting link decoded; the UI explains `unknown-version` and `invalid` until a change. */
   status: DecodeStatus;
   set(name: string, value: unknown): void;
   randomize(seed: number): void;
@@ -25,12 +25,13 @@ export function createParamsStore(meta: ShaderMeta, search = ""): ParamsStore {
     values,
     status,
     set: (name, value) =>
-      setState({ values: quantize(meta, { ...getState().values, [name]: value }) }),
-    randomize: (next) => setState({ seed: next >>> 0, values: randomize(meta, next >>> 0) }),
+      setState({ values: quantize(meta, { ...getState().values, [name]: value }), status: "ok" }),
+    randomize: (next) =>
+      setState({ seed: next >>> 0, values: randomize(meta, next >>> 0), status: "ok" }),
     applyPreset: (name) => {
       const preset = meta.presets[name];
       if (!preset) throw new Error(`Unknown preset "${name}" for ${meta.name}`);
-      setState({ values: quantize(meta, { ...defaults(meta), ...preset }) });
+      setState({ values: quantize(meta, { ...defaults(meta), ...preset }), status: "ok" });
     },
   }));
 }
