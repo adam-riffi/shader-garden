@@ -1,5 +1,11 @@
 import { describe, expect, it } from "vitest";
-import { defaults, defineMeta, quantize, type ShaderMeta, toUniforms } from "../../src/params/schema";
+import {
+  defaults,
+  defineMeta,
+  quantize,
+  type ShaderMeta,
+  toUniforms,
+} from "../../src/params/schema";
 
 const meta: ShaderMeta = defineMeta({
   name: "demo",
@@ -36,7 +42,9 @@ describe("defineMeta", () => {
   });
 
   it("rejects a preset naming an unknown param", () => {
-    expect(() => defineMeta({ ...base, params: [float], presets: { P: { b: 1 } } } as never)).toThrow();
+    expect(() =>
+      defineMeta({ ...base, params: [float], presets: { P: { b: 1 } } } as never),
+    ).toThrow();
   });
 });
 
