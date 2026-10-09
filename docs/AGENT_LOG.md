@@ -12,6 +12,12 @@ Entry format:
 
 ---
 
+## 2026-10-09 · claude · stack/m3/06-bloom · #18
+- Done: `PingPong.fill` (seed both targets) and `SimulationPlane`: seeds on mount, Seed or a new seed value; 8 steps per frame while the clock runs; display pass over `pp.texture`; a capture replays `round(t*60)*8` steps. Bloom: seed drops of B from `uSeed` and `uReseed`, a 3×3-Laplacian Gray-Scott step (Da 1.0, Db 0.5), and a display with lit edges, cropped to cover. Presets as (feed, kill): Coral, Mitosis, Maze, Spots. A Seed button on simulation pages.
+- Tests: `PingPong.fill` pass order, `test/shaders/bloom.test.ts` (simulation 8×512, preset pairs) and the Seed e2e test, committed red first; `shaders:check` passes for bloom, seed and sim; golden from CI (960 steps, about 13 s locally on SwiftShader; golden timeout 120 s).
+- Scope/decisions: a hash flaw found here (seed drops on a ring) was fixed at its source in #14 (`hash12` chains hashes now); the Terrain and Aurora goldens are being regenerated.
+- Next: Ink (#19).
+
 ## 2026-10-09 · claude · stack/m3/05-mandelbulb · #17
 - Done: Mandelbulb: power-n distance estimator (2–12, 8 iterations, orbit trap), up to 128 sphere-tracing steps inside a bounding sphere, soft shadows, occlusion from the step count, a halo for grazing rays, and an orbiting camera. Params: power, spin, glow, core, rim. Presets: Classic (8), Bloom (4.5), Spiky (11.5). Capture mode now renders its frame itself and reads a pixel back before setting `html[data-capture-ready]`; the goldens wait for it.
 - Tests: `test/shaders/mandelbulb.test.ts` (gallery, power 2–12 default 8, presets) and `e2e/capture.spec.ts` (capture-ready set in capture mode only), committed red first; `shaders:check` passes; golden from CI.
