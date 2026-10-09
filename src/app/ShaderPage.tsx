@@ -1,4 +1,4 @@
-import { useLayoutEffect, useMemo, useState } from "react";
+import { useEffect, useLayoutEffect, useMemo, useState } from "react";
 import { Link, useParams } from "react-router";
 import { useStore } from "zustand";
 import { captureTime } from "../engine/capture";
@@ -46,11 +46,21 @@ function ShaderScreen({ entry }: { entry: ShaderEntry }) {
   const seed = useStore(store, (s) => s.seed);
   const status = useStore(store, (s) => s.status);
   const uniforms = useMemo(() => toUniforms(meta, values, seed), [meta, values, seed]);
+  // Capture mode announces its finished frame on <html data-capture-ready> for scripts and tests.
+  useEffect(() => () => void delete document.documentElement.dataset.captureReady, []);
 
   if (capture) {
     return (
       <div style={{ position: "fixed", inset: 0 }}>
-        <ShaderView fragmentShader={fragment} uniforms={uniforms} clock={clock} capture />
+        <ShaderView
+          fragmentShader={fragment}
+          uniforms={uniforms}
+          clock={clock}
+          capture
+          onCaptureReady={() => {
+            document.documentElement.dataset.captureReady = "true";
+          }}
+        />
       </div>
     );
   }

@@ -1,6 +1,8 @@
 import type { ShaderMeta } from "../params/schema";
 import auroraFragment from "./aurora/aurora.frag.glsl";
 import { meta as auroraMeta } from "./aurora/meta";
+import mandelbulbFragment from "./mandelbulb/mandelbulb.frag.glsl";
+import { meta as mandelbulbMeta } from "./mandelbulb/meta";
 import { meta as moireMeta } from "./moire/meta";
 import moireFragment from "./moire/moire.frag.glsl";
 import { meta as terrainMeta } from "./terrain/meta";
@@ -18,6 +20,7 @@ export interface ShaderEntry {
 /** Every shader, in gallery order. */
 export const registry: ShaderEntry[] = [
   { meta: terrainMeta, fragment: terrainFragment },
+  { meta: mandelbulbMeta, fragment: mandelbulbFragment },
   { meta: auroraMeta, fragment: auroraFragment },
   { meta: moireMeta, fragment: moireFragment },
   { meta: testMeta, fragment: testFragment, hidden: true },

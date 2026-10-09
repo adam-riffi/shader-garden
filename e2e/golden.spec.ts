@@ -14,6 +14,10 @@ test.describe("golden screenshots (seed 1, t = 2 s, 512x512)", () => {
   for (const name of names) {
     test(name, async ({ page }) => {
       await page.goto(`/s/${name}?t=2`);
+      // Set once the frozen frame has been drawn and read back, however long the GPU takes.
+      await page
+        .locator("html[data-capture-ready]")
+        .waitFor({ state: "attached", timeout: 60_000 });
       await expect(page.locator("canvas")).toHaveScreenshot(`${name}.png`, {
         maxDiffPixelRatio: 0.01,
       });
