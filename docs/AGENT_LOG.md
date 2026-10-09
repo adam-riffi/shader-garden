@@ -12,6 +12,12 @@ Entry format:
 
 ---
 
+## 2026-10-09 · claude · stack/m0/01-scaffold · #1
+- Done: Vite 8 + React 19 + TypeScript 7 + Biome + Vitest + Playwright scaffold; app shell with the title; `ci.yml` (lint, typecheck, test, build, e2e) and the `pr-meme.yml` caller. Repository and Vercel project set up per ENGINEERING.md section 16.
+- Tests: `test/app.test.tsx` (server render shows the title); `e2e/smoke.spec.ts` `@smoke` (`/` returns 200 with the heading). Both committed red first.
+- Scope/decisions: none. Coverage gate deferred to M1 (first `src/engine` code); uptime target deferred to M7 per DESIGN.md section 9.
+- Next: PR 2 (`smoke.yml`, `vercel.json` headers, Dependabot), then M1.
+
 ## 2026-10-09 · claude · (none) · (none)
 - Done: Repository pack created: DESIGN.md, ENGINEERING.md, AGENTS.md, CLAUDE.md, Copilot instructions, PR template, ADR template.
 - Tests: none yet.
