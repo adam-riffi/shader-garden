@@ -4,9 +4,10 @@ import {
   type Object3D,
   RawShaderMaterial,
   type Texture,
+  type WebGLRenderer,
   WebGLRenderTarget,
 } from "three";
-import { describe, expect, it } from "vitest";
+import { describe, expect, expectTypeOf, it } from "vitest";
 import { type PassRenderer, PingPong } from "../../src/engine/PingPong";
 import { UniformBindingError } from "../../src/engine/uniforms";
 
@@ -16,8 +17,8 @@ function simMaterial() {
 
 /** Records which target each pass drew into and which texture it read. */
 function recordingRenderer(material: RawShaderMaterial) {
-  let target: WebGLRenderTarget | null = new WebGLRenderTarget(1, 1);
-  const outer = target;
+  const outer = new WebGLRenderTarget(1, 1);
+  let target: WebGLRenderTarget | null = outer;
   const passes: { into: WebGLRenderTarget | null; read: Texture }[] = [];
   const renderer: PassRenderer = {
     getRenderTarget: () => target,
@@ -79,6 +80,10 @@ describe("PingPong", () => {
   it("requires the material to declare the state uniform", () => {
     const material = new RawShaderMaterial({ uniforms: {} });
     expect(() => new PingPong(material)).toThrow(UniformBindingError);
+  });
+
+  it("can be driven by a real WebGLRenderer", () => {
+    expectTypeOf<WebGLRenderer>().toExtend<PassRenderer>();
   });
 
   it("releases both targets on dispose", () => {
