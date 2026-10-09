@@ -12,6 +12,12 @@ Entry format:
 
 ---
 
+## 2026-10-09 · claude · stack/m3/04-moire · #16
+- Done: Moiré: up to four moving ring sources plus an optional static-and-rotating line pair. Each sheet's transmission (from cos, anti-aliased with `fwidth`) multiplies, so beat fringes emerge. Params: density (lines per screen height), ring sources, line gratings, rotation, line width, colour. Presets: Rings, Grid, Drift.
+- Tests: `test/shaders/moire.test.ts` (gallery and title, ring sources 0–4, presets), committed red first; `shaders:check` passes; golden from CI.
+- Scope/decisions: density is in lines per screen height, not radians. 14 lines per screen was too coarse to show moiré; 60 by default gives fine gratings with large fringes.
+- Next: Mandelbulb (#17).
+
 ## 2026-10-09 · claude · stack/m3/03-aurora · #15
 - Done: Aurora: up to six layered curtains whose lower edges wander with fBm, a long glow above, a soft fade below and a bright fringe at the edge, vertical rays from value noise, a twinkling star field, and a soft exponential tone map. Params: layers, intensity, speed, drift, lower and upper glow. Presets: Polar, Solar storm.
 - Tests: `test/shaders/aurora.test.ts` (gallery, layers 1–6, presets), committed red first; `shaders:check` passes; golden from CI.
