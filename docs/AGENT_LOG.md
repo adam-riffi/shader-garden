@@ -12,6 +12,12 @@ Entry format:
 
 ---
 
+## 2026-10-09 · claude · stack/m3/01-shader-pages · #13
+- Done: `src/shaders/registry.ts` (gallery order, hidden `test`); react-router routes (`/` list, `/s/:name` `ShaderPage` with generated controls and URL sync, an unknown-shader message, a catch-all); capture mode `?t=<s>` (`src/engine/capture.ts`: frozen clock, full-viewport canvas, dpr 1, `frameloop="demand"`); `e2e/golden.spec.ts` (every shader folder at seed 1, t = 2, 512×512, 1% tolerance, Linux only) with baselines uploaded as a CI artifact; SPA rewrite in `vercel.json`. `EngineDemo` is gone and the e2e tests moved to `/s/test`.
+- Tests: registry consistency, `captureTime`, the routed App render, an unknown-shader e2e test, a deep-link `@smoke` test, and the goldens; committed red first.
+- Scope/decisions: routing lands in M3 because goldens and captures need per-shader URLs; M4 keeps the gallery grid, panel, source viewer and theme. The test pattern has a golden too, as an engine regression check. Initial JS is 83 KB gzipped (react-router).
+- Next: Terrain with `common/noise.glsl` (#14).
+
 ## 2026-10-09 · claude · stack/m2/05-nightly · #12
 - Done: `.github/workflows/nightly.yml` (daily at 03:17 UTC and on demand): `pnpm test` with `FC_NUM_RUNS=10000`, plus `pnpm audit`. Not a required check. The commands table in AGENTS.md documents `FC_NUM_RUNS` and `FC_SEED`. End-of-session HANDOFF.
 - Tests: the full suite passes locally at 10,000 cases per property (1.4 s); `pnpm audit` is clean; `actionlint` is clean.

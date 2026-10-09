@@ -7,7 +7,7 @@ test("home page renders an animated shader canvas without errors", async ({ page
     if (message.type() === "error") errors.push(message.text());
   });
 
-  await page.goto("/");
+  await page.goto("/s/test");
   const canvas = page.locator("canvas");
   await expect(canvas).toBeVisible();
 
