@@ -1,6 +1,8 @@
 import type { ShaderMeta } from "../params/schema";
 import auroraFragment from "./aurora/aurora.frag.glsl";
 import { meta as auroraMeta } from "./aurora/meta";
+import { meta as moireMeta } from "./moire/meta";
+import moireFragment from "./moire/moire.frag.glsl";
 import { meta as terrainMeta } from "./terrain/meta";
 import terrainFragment from "./terrain/terrain.frag.glsl";
 import { meta as testMeta } from "./test/meta";
@@ -17,6 +19,7 @@ export interface ShaderEntry {
 export const registry: ShaderEntry[] = [
   { meta: terrainMeta, fragment: terrainFragment },
   { meta: auroraMeta, fragment: auroraFragment },
+  { meta: moireMeta, fragment: moireFragment },
   { meta: testMeta, fragment: testFragment, hidden: true },
 ];
 
