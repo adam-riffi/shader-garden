@@ -5,11 +5,15 @@ export interface FrameStats {
   p95(): number;
 }
 
+/** Longer gaps mean the tab was hidden (requestAnimationFrame pauses), not a slow frame. */
+const MAX_FRAME_MS = 1000;
+
 export function createFrameStats(capacity = 120): FrameStats {
   const frames: number[] = [];
   let next = 0;
   return {
     push(frameMs) {
+      if (!(frameMs > 0 && frameMs <= MAX_FRAME_MS)) return;
       frames[next] = frameMs;
       next = (next + 1) % capacity;
     },

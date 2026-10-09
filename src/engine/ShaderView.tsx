@@ -30,7 +30,9 @@ function ShaderPlane({
   uniforms = {},
   clock,
 }: Omit<ShaderViewProps, "className">) {
-  // biome-ignore lint/correctness/useExhaustiveDependencies: values are bound in place below; rebuilding per change would recompile the program.
+  // Values are bound in place below; only a new shader or a new set of uniform names rebuilds.
+  const names = Object.keys(uniforms).sort().join();
+  // biome-ignore lint/correctness/useExhaustiveDependencies: `names` stands in for `uniforms`.
   const material = useMemo(
     () =>
       new RawShaderMaterial({
@@ -39,7 +41,7 @@ function ShaderPlane({
         fragmentShader,
         uniforms: createUniforms({ ...uniforms, uTime: clock.time, uResolution: [1, 1] }),
       }),
-    [vertexShader, fragmentShader],
+    [vertexShader, fragmentShader, names],
   );
   const size = useMemo(() => new Vector2(), []);
 

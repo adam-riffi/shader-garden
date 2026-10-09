@@ -17,7 +17,9 @@ export function FrameMeter() {
 
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
-      if (event.key.toLowerCase() !== "f" || event.ctrlKey || event.metaKey || event.altKey) return;
+      // Chrome sends keydown without a key on autofill, hence the comparison instead of toLowerCase.
+      if (event.key !== "f" && event.key !== "F") return;
+      if (event.repeat || event.ctrlKey || event.metaKey || event.altKey) return;
       if (isTyping(event.target)) return;
       setVisible((shown) => !shown);
     };
