@@ -12,6 +12,12 @@ Entry format:
 
 ---
 
+## 2026-10-09 · claude · stack/m0/02-deploy · #2
+- Done: `smoke.yml` (runs `@smoke` against every successful Vercel deployment), `vercel.json` security headers from DESIGN.md section 13, Dependabot (npm and Actions, weekly, grouped), first `HANDOFF.md`. Vercel Authentication turned off for this project.
+- Tests: the existing `@smoke` e2e test, now also run against the preview URL by `smoke.yml`.
+- Scope/decisions: the security headers have no milestone in DESIGN.md section 9; they ship in M0 because production goes live now. Previews are public (Georges' choice), which keeps "Secrets: none" from DESIGN.md section 12.
+- Next: Georges sets the Vercel production branch to `main`; then M1.
+
 ## 2026-10-09 · claude · stack/m0/01-scaffold · #1
 - Done: Vite 8 + React 19 + TypeScript 7 + Biome + Vitest + Playwright scaffold; app shell with the title; `ci.yml` (lint, typecheck, test, build, e2e) and the `pr-meme.yml` caller. Repository and Vercel project set up per ENGINEERING.md section 16.
 - Tests: `test/app.test.tsx` (server render shows the title); `e2e/smoke.spec.ts` `@smoke` (`/` returns 200 with the heading). Both committed red first.
