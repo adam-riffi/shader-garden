@@ -1,29 +1,29 @@
 # Handoff — 2026-10-09 · claude
 
 ## State
-- `main` at `ca77403`: docs: add design pack. No CI on `main` yet (`ci.yml` lands with #1).
-- Open PRs (stack M0, merge bottom-up):
-  - #1 build: scaffold Vite, React, TypeScript, Biome, Vitest and Playwright with CI. Ready, all checks green, waiting on review and merge.
-  - #2 ci: add post-deploy smoke, security headers and Dependabot. Based on #1; smoke green on its preview, waiting on CI, then review and merge after #1.
+- `main` includes M0 (#1, #2) and M1 (#3–#7); this file ships with #7, the last PR merged this session. CI green on every merge.
+- Production: https://shader-garden-weld.vercel.app (Vercel's alias; `shader-garden.vercel.app` belongs to an unrelated project). It shows the title, the engine test pattern, and the frame meter on `F`.
+- Open PRs: none.
 
 ## Done this session
-- Repository `adam-riffi/shader-garden` created (public). ENGINEERING.md section 16 setup done: squash only (PR title and body), head branches deleted on merge, read-only Actions token, `main` ruleset (PR required, linear history, squash only, required checks `lint typecheck test build e2e`), Dependabot alerts, CodeQL default setup.
-- Vercel project `shader-garden` (team `wuxinggraph`, Vite preset, Git integration), with Vercel Authentication turned off so smoke reaches previews without a secret.
-- M0 stack #1 and #2.
+- Repository and one-time setup (ENGINEERING.md section 16): squash only (PR title and body), head branches deleted on merge, read-only Actions token, `main` ruleset (PR, linear history, squash, required `lint typecheck test build e2e`), Dependabot alerts, CodeQL default setup (now `javascript-typescript` and `actions`), Vercel project `shader-garden` (team `wuxinggraph`, Vite preset, Git integration, Vercel Authentication off).
+- M0 scaffold: #1 (Vite, React, TS, Biome, Vitest, Playwright, `ci.yml`, pr-meme caller), #2 (`smoke.yml`, security headers, Dependabot).
+- M1 engine: #3 clock and coverage gate, #4 uniforms and `ShaderView`, #5 `shaders:check`, #6 `PingPong`, #7 frame meter plus the M1 review fixes (WebGL2 fallback, uniform kind checks, frame-time filtering).
 
 ## Verified
-- #2: preview `shader-garden-1ubeod83l` returns 200 with the CSP, Referrer-Policy and nosniff headers; [`smoke` passed](https://github.com/adam-riffi/shader-garden/actions/runs/37928306102) against it.
-- #1: lint, typecheck, test, build, e2e, meme and Vercel checks green; the Vercel bot commented the preview URL; the deployment returns 200 with `<title>Shader Garden</title>`.
+- Production deploys from `main` (branch tracking is correct); smoke passed on production ([run](https://github.com/adam-riffi/shader-garden/actions/runs/37948593980)); `curl` shows the CSP, Referrer-Policy and nosniff headers.
+- In CI, SwiftShader WebGL2 works on `ubuntu-latest`: `shaders:check` and the canvas e2e test pass.
+- Independent reviews (code-review skill) were posted on #1, #2, #3 and #7; their findings are fixed or deferred with reasons.
 
 ## Next
-1. After #1 and #2 merge, check that production deploys from `main`, smoke passes on it, and `GET /` contains "Shader Garden".
-2. M1 engine (DESIGN.md section 9): start in plan mode. `ShaderView` with uniform binding, a deterministic clock, `PingPong`, the frame meter, `shaders:check`, and the coverage gate.
+1. M2 params (DESIGN.md section 9): param schema (zod), codec `?v=1&s=&p=` with versioning, seeded random, zustand store, URL sync within 250 ms; property tests P1–P3; `nightly.yml` (10,000-case property runs, `pnpm audit`). Start in plan mode.
+2. M3 needs from M1: seeding and readback for `PingPong`, `#include` of `common/*.glsl` (vite-plugin-glsl handles it), golden screenshots at seed 1 and t = 2 s (`clock.setTime(2)` with `pause()`).
 
 ## Needs from Georges
-- **Vercel production branch:** the project's first Git deployment (branch `stack/m0/01-scaffold`) went out as *production*, probably because the new project had no production deployment yet. #2's branch deployed as a preview. Please confirm that Vercel, shader-garden, Settings, Environments, Production, Branch Tracking shows `main`. The MCP tools cannot read this setting.
-- Review and merge #1, then #2.
+- Nothing blocking. Optional: rename the Vercel production alias if you want something nicer than `shader-garden-weld.vercel.app` (Vercel, Settings, Domains); then update DESIGN.md sections 12 and 14 through an ADR.
 
 ## Notes
-- Uptime target (ENGINEERING.md section 16 step 8) is deferred to M7 per DESIGN.md section 9.
-- `actionlint` is installed locally (`~/go/bin`); run it whenever workflows change.
-- Vercel deploys every pushed branch; `smoke.yml` runs from the deployed commit's own copy of the workflow.
+- Deferred review items: Playwright browser cache in CI (M4), a production-alias check in `smoke.yml` (M7), uniform-type messages in `shaders:check` (M3 if they mislead), StrictMode double compile in dev (harmless).
+- The frame-meter e2e waits for the heading before pressing `F`: the key listener attaches in a passive effect, after `load`.
+- pnpm 12 enforces a one-day minimum release age; pin the previous version rather than adding `minimumReleaseAgeExclude`.
+- `actionlint` is in `~/go/bin`. On Windows, stop a stray `vite preview` by port (`netstat -ano`, `taskkill //PID … //F`).
