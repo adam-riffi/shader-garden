@@ -27,13 +27,13 @@ Operating manual for coding agents in this repository. Codex and Copilot read th
 | Unit and property tests | `pnpm test` |
 | Lint and format | `pnpm lint` / `pnpm format` |
 | Typecheck | `pnpm typecheck` |
-| Shader compile check | `pnpm shaders:check` |
+| Shader compile check | `pnpm shaders:check` (added in M1) |
 | Build | `pnpm build` |
-| End-to-end tests | `pnpm e2e` |
-| Record demo video | `pnpm capture -- --url <url>` |
-| Check all | `pnpm check` |
+| End-to-end tests | `pnpm e2e` (first run: `pnpm exec playwright install chromium`; `BASE_URL=<url>` targets a deployment) |
+| Record demo video | `pnpm capture -- --url <url>` (added in M6) |
+| Check all | `pnpm check` (lint, typecheck, test, build, e2e) |
 
-Keep this table accurate: when you add or change a script, update the table in the same PR. Until milestone M0 creates them, these commands describe the intended scripts.
+Keep this table accurate: when you add or change a script, update the table in the same PR.
 
 ## Rules
 
