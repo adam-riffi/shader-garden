@@ -12,6 +12,12 @@ Entry format:
 
 ---
 
+## 2026-10-09 · claude · stack/m1/01-clock · #3
+- Done: deterministic `Clock` (`src/engine/clock.ts`): tick clamped to `maxDelta`, pause/play, exact `step` and `setTime` for captures and goldens. Coverage gate (v8): repository at least 80% of lines, `src/engine` and `src/params` at least 90%; `.tsx` UI glue excluded.
+- Tests: `test/engine/clock.test.ts` (7 cases), committed red first; clock at 100% coverage.
+- Scope/decisions: none.
+- Next: uniform binding and `ShaderView` (#4).
+
 ## 2026-10-09 · claude · stack/m0/02-deploy · #2
 - Done: `smoke.yml` (runs `@smoke` against every successful Vercel deployment), `vercel.json` security headers from DESIGN.md section 13, Dependabot (npm and Actions, weekly, grouped), first `HANDOFF.md`. Vercel Authentication turned off for this project.
 - Tests: the existing `@smoke` e2e test, now also run against the preview URL by `smoke.yml`.
