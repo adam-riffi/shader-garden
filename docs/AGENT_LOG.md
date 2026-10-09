@@ -12,6 +12,12 @@ Entry format:
 
 ---
 
+## 2026-10-09 · claude · stack/m1/04-ping-pong · #6
+- Done: `PingPong` (`src/engine/PingPong.ts`): two half-float (RGBA16F) targets, at most 512 px (DESIGN.md section 13). Each step binds the previous state to `uState`, draws the simulation material into the other target and swaps; the previous render target is restored afterwards. `dispose` frees the targets and the quad, while the material stays the caller's.
+- Tests: `test/engine/PingPong.test.ts` (allocation, swap, pass order with a recording renderer, target restore, size budget, missing uniform, dispose), committed red first; a later compile-time check confirms `WebGLRenderer` satisfies `PassRenderer`.
+- Scope/decisions: seeding and reading back the state come with Bloom and Ink in M3. Nothing renders a `PingPong` on a real GPU yet; the first simulation shader in M3 will cover that.
+- Next: frame meter (#7).
+
 ## 2026-10-09 · claude · stack/m1/03-shaders-check · #5
 - Done: `pnpm shaders:check` (`scripts/shaders-check.ts`): Vite's SSR loader resolves every `.glsl` through vite-plugin-glsl, and headless Chromium (SwiftShader WebGL2) compiles, links and draws each program, failing on errors, info-log warnings or GL errors. `src/shaders/programs.ts` pairs `<name>.frag.glsl` with `<name>.vert.glsl` or the shared full-screen vertex shader. The script runs in the CI `e2e` job and in `pnpm check`.
 - Tests: `test/shaders/programs.test.ts` (pairing, missing vertex shader, real glob), committed red first. Checked by hand that a broken shader makes the script exit 1.
