@@ -12,6 +12,12 @@ Entry format:
 
 ---
 
+## 2026-10-09 · claude · stack/m2/01-schema · #8
+- Done: `src/params/schema.ts`: zod metadata schema (float, int, bool, color; at most 16 params and 65,535 steps; unique names; presets limited to known params), `defineMeta`, `quantize` (snap to step, clamp, defaults for missing or mistyped values, drop unknown keys), `defaults`, `toUniforms` (uniform name `u` + Name, colour to 0..1 RGB, `uSeed`). `src/shaders/test/meta.ts` with all four types; the test shader uses them.
+- Tests: `test/params/schema.test.ts` (18 cases) and `test/shaders/metas.test.ts` (every `meta.ts` named after its folder and every uniform declared in its GLSL), committed red first.
+- Scope/decisions: none beyond the approved M2 plan.
+- Next: seeded random and P3 (#9).
+
 ## 2026-10-09 · claude · stack/m1/05-frame-meter · #7
 - Done: `createFrameStats` (`src/engine/frameStats.ts`, rolling window, nearest-rank p95) and `FrameMeter` (requestAnimationFrame sampling, refreshed every 500 ms, `F` toggles it; ignored while typing or with modifier keys), mounted in `App`.
 - Tests: `test/engine/frameStats.test.ts` (percentile, window, empty) and `e2e/frame-meter.spec.ts` (F shows `p95 N.N ms`, F hides it), committed red first. The e2e test waits for the heading before pressing F: the listener attaches in a passive effect, after `load`.
