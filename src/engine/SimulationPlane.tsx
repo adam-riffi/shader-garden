@@ -51,17 +51,36 @@ export function SimulationPlane({
         vertexShader,
         fragmentShader: fragment,
         uniforms: {
-          ...createUniforms({ ...uniforms, uTime: clock.time, uResolution: [1, 1], uReseed: 0 }),
+          ...createUniforms({
+            ...uniforms,
+            uTime: clock.time,
+            uResolution: [1, 1],
+            uReseed: 0,
+            uSimTime: 0,
+            uStepDt: 1 / (CAPTURE_FPS * stepsPerFrame),
+          }),
           uState: { value: null },
           uTexel: { value: new Vector2(1 / size, 1 / size) },
         },
       });
     return { display: make(fragmentShader), step: make(step), seed: make(seed) };
-  }, [vertexShader, fragmentShader, step, seed, size, names]);
+  }, [vertexShader, fragmentShader, step, seed, size, stepsPerFrame, names]);
   const pingPong = useMemo(() => new PingPong(materials.step, size), [materials, size]);
   const resolution = useMemo(() => new Vector2(), []);
   const needsSeed = useRef(true);
   const replayed = useRef(false);
+  const stepsTaken = useRef(0);
+
+  // Step passes see uSimTime, the simulated seconds so far, counted in steps rather than wall
+  // time, so a live run and a capture replay follow the same animated flow.
+  const advance = (renderer: Parameters<PingPong["step"]>[0], steps: number) => {
+    for (let i = 0; i < steps; i++) {
+      const simTime = stepsTaken.current / (CAPTURE_FPS * stepsPerFrame);
+      bindUniforms(materials.step.uniforms, { uSimTime: simTime });
+      pingPong.step(renderer);
+      stepsTaken.current++;
+    }
+  };
 
   useEffect(
     () => () => {
@@ -90,14 +109,15 @@ export function SimulationPlane({
     if (needsSeed.current) {
       pingPong.fill(gl, materials.seed);
       needsSeed.current = false;
+      stepsTaken.current = 0;
     }
     if (capture) {
       if (!replayed.current) {
-        pingPong.step(gl, Math.round(clock.time * CAPTURE_FPS) * stepsPerFrame);
+        advance(gl, Math.round(clock.time * CAPTURE_FPS) * stepsPerFrame);
         replayed.current = true;
       }
     } else if (!clock.paused) {
-      pingPong.step(gl, stepsPerFrame);
+      advance(gl, stepsPerFrame);
     }
     gl.getDrawingBufferSize(resolution);
     bindUniforms(materials.display.uniforms, {

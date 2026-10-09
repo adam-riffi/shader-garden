@@ -6,6 +6,10 @@ import bloomFragment from "./bloom/bloom.frag.glsl";
 import { meta as bloomMeta } from "./bloom/meta";
 import bloomSeed from "./bloom/seed.frag.glsl";
 import bloomStep from "./bloom/sim.frag.glsl";
+import inkFragment from "./ink/ink.frag.glsl";
+import { meta as inkMeta } from "./ink/meta";
+import inkSeed from "./ink/seed.frag.glsl";
+import inkStep from "./ink/sim.frag.glsl";
 import mandelbulbFragment from "./mandelbulb/mandelbulb.frag.glsl";
 import { meta as mandelbulbMeta } from "./mandelbulb/meta";
 import { meta as moireMeta } from "./moire/meta";
@@ -32,6 +36,12 @@ export const registry: ShaderEntry[] = [
     meta: bloomMeta,
     fragment: bloomFragment,
     simulation: { step: bloomStep, seed: bloomSeed, stepsPerFrame: 8, size: 512 },
+  },
+  {
+    meta: inkMeta,
+    fragment: inkFragment,
+    // Advection blurs a little every step, so Ink takes two larger steps per frame, not eight.
+    simulation: { step: inkStep, seed: inkSeed, stepsPerFrame: 2, size: 512 },
   },
   { meta: auroraMeta, fragment: auroraFragment },
   { meta: moireMeta, fragment: moireFragment },
