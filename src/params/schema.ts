@@ -31,7 +31,7 @@ function numeric<T extends "float" | "int">(type: T, value: z.ZodNumber) {
       if (p.default < p.min || p.default > p.max) {
         ctx.addIssue({ code: "custom", message: "default must lie within [min, max]" });
       }
-      if ((p.max - p.min) / p.step > MAX_STEPS) {
+      if (stepCount(p) > MAX_STEPS) {
         ctx.addIssue({ code: "custom", message: `at most ${MAX_STEPS} steps` });
       }
     });
@@ -84,7 +84,7 @@ export function defineMeta(meta: z.input<typeof metaSchema>): ShaderMeta {
 }
 
 /** Number of steps above `min`; the grid holds `stepCount + 1` values. */
-export function stepCount(p: NumericParam): number {
+export function stepCount(p: { min: number; max: number; step: number }): number {
   return Math.floor((p.max - p.min) / p.step + 1e-9);
 }
 

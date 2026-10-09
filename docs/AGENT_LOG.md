@@ -12,6 +12,12 @@ Entry format:
 
 ---
 
+## 2026-10-09 · claude · stack/m2/02-random · #9
+- Done: `src/params/random.ts` (`mulberry32`, `randomize`, uniform over each param's grid); fast-check with a seeded global config (`test/setup.ts`: `FC_SEED`, `FC_NUM_RUNS`, default 200); shared arbitraries for valid metas and values (`test/params/arbitraries.ts`). The schema's step limit now uses `stepCount`.
+- Tests: P3 (deterministic; in-range and on-grid for arbitrary metas and seeds) and mulberry32 sequence tests, committed red first. Ran 10,000 and 100,000 cases locally; timing scales with `FC_NUM_RUNS`.
+- Scope/decisions: none.
+- Next: versioned URL codec, P1 and P2 (#10).
+
 ## 2026-10-09 · claude · stack/m2/01-schema · #8
 - Done: `src/params/schema.ts`: zod metadata schema (float, int, bool, color; at most 16 params and 65,535 steps; unique names; presets limited to known params), `defineMeta`, `quantize` (snap to step, clamp, defaults for missing or mistyped values, drop unknown keys), `defaults`, `toUniforms` (uniform name `u` + Name, colour to 0..1 RGB, `uSeed`). `src/shaders/test/meta.ts` with all four types; the test shader uses them.
 - Tests: `test/params/schema.test.ts` (18 cases) and `test/shaders/metas.test.ts` (every `meta.ts` named after its folder and every uniform declared in its GLSL), committed red first.

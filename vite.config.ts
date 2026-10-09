@@ -6,6 +6,7 @@ export default defineConfig({
   plugins: [react(), glsl()],
   test: {
     include: ["test/**/*.test.{ts,tsx}"],
+    setupFiles: ["test/setup.ts"],
     coverage: {
       provider: "v8",
       // Components (.tsx) are UI glue and are covered by e2e (ENGINEERING.md section 8).
