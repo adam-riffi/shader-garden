@@ -12,6 +12,12 @@ Entry format:
 
 ---
 
+## 2026-10-09 · claude · stack/m3/07-ink · #19
+- Done: Ink: semi-Lagrangian advection of a dye texture by the curl of a time-shifted simplex potential (divergence-free, no pressure solve), with fading, two circling emitters and marbled seeding. `SimulationPlane` now gives step passes `uSimTime` (simulated seconds counted in steps) and `uStepDt`, so live runs and capture replays share the same animated flow. Params: curl scale, flow, fade, two dyes. Presets: Marble, Smoke.
+- Tests: `test/shaders/ink.test.ts` (gallery simulation within 512 px; curl, flow and fade params; presets), committed red first; `shaders:check` passes for ink, seed and sim; golden from CI.
+- Scope/decisions: Ink takes 2 steps per frame, not 8. Advection blurs on every step, and 960 steps smeared the dye to mud; DESIGN's 8 steps per frame applies to reaction-diffusion. The red test had pinned 8, my own over-specification, so it now checks only the 512 px budget.
+- Next: a code-review pass over M3, fixes, merges, and HANDOFF.
+
 ## 2026-10-09 · claude · stack/m3/06-bloom · #18
 - Done: `PingPong.fill` (seed both targets) and `SimulationPlane`: seeds on mount, Seed or a new seed value; 8 steps per frame while the clock runs; display pass over `pp.texture`; a capture replays `round(t*60)*8` steps. Bloom: seed drops of B from `uSeed` and `uReseed`, a 3×3-Laplacian Gray-Scott step (Da 1.0, Db 0.5), and a display with lit edges, cropped to cover. Presets as (feed, kill): Coral, Mitosis, Maze, Spots. A Seed button on simulation pages.
 - Tests: `PingPong.fill` pass order, `test/shaders/bloom.test.ts` (simulation 8×512, preset pairs) and the Seed e2e test, committed red first; `shaders:check` passes for bloom, seed and sim; golden from CI (960 steps, about 13 s locally on SwiftShader; golden timeout 120 s).
