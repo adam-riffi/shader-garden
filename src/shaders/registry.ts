@@ -1,4 +1,6 @@
 import type { ShaderMeta } from "../params/schema";
+import auroraFragment from "./aurora/aurora.frag.glsl";
+import { meta as auroraMeta } from "./aurora/meta";
 import { meta as terrainMeta } from "./terrain/meta";
 import terrainFragment from "./terrain/terrain.frag.glsl";
 import { meta as testMeta } from "./test/meta";
@@ -14,6 +16,7 @@ export interface ShaderEntry {
 /** Every shader, in gallery order. */
 export const registry: ShaderEntry[] = [
   { meta: terrainMeta, fragment: terrainFragment },
+  { meta: auroraMeta, fragment: auroraFragment },
   { meta: testMeta, fragment: testFragment, hidden: true },
 ];
 
