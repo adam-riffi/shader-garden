@@ -12,6 +12,12 @@ Entry format:
 
 ---
 
+## 2026-10-09 · claude · stack/m2/03-codec · #10
+- Done: `src/params/codec.ts`. `encode` writes `v=1&s=<uint32>&p=<base64url>` (numeric as LEB128 step index, bool 1 byte, colour 3 bytes). `decode` returns `{ seed, values, status }` with `ok | empty | unknown-version | invalid`; a fallback means defaults and seed 1. A truncated `p` defaults trailing params; out-of-grid indexes clamp.
+- Tests: P1 (round trip equals `quantize`), P2 (`/s/<name>?<query>` at most 200 characters), the golden v1 string for the test shader's defaults, and the fallback cases (version, seed, charset, base64 length, long varint, short colour, missing `p`, appended params, clamp). Committed red first; P1 and P2 pass at 10,000 cases; `codec.ts` at 100% lines.
+- Scope/decisions: none. The golden `v=1&s=1&p=HBR88qQA` locks the wire format: changing it needs `VERSION` 2.
+- Next: zustand store, URL sync and generated controls (#11).
+
 ## 2026-10-09 · claude · stack/m2/02-random · #9
 - Done: `src/params/random.ts` (`mulberry32`, `randomize`, uniform over each param's grid); fast-check with a seeded global config (`test/setup.ts`: `FC_SEED`, `FC_NUM_RUNS`, default 200); shared arbitraries for valid metas and values (`test/params/arbitraries.ts`). The schema's step limit now uses `stepCount`.
 - Tests: P3 (deterministic; in-range and on-grid for arbitrary metas and seeds) and mulberry32 sequence tests, committed red first. Ran 10,000 and 100,000 cases locally; timing scales with `FC_NUM_RUNS`.
