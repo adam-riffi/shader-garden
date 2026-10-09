@@ -10,10 +10,11 @@ uint hashU(uint x) {
   return x;
 }
 
-// Pseudo-random value in [0, 1] for an integer lattice cell.
+// Pseudo-random value in [0, 1] for an integer lattice cell. The hashes are chained, not XORed
+// with a multiple of x: XOR left neighbouring cells' values correlated (points fell on a ring).
 float hash12(vec2 cell) {
   uvec2 c = uvec2(ivec2(cell));
-  return float(hashU(c.x * 0x8da6b343U ^ hashU(c.y + 0x9e3779b9U))) / 4294967295.0;
+  return float(hashU(c.x + hashU(c.y + 0x9e3779b9U))) / 4294967295.0;
 }
 
 // Smoothly interpolated lattice values, in [0, 1].
