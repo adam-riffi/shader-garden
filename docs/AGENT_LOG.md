@@ -12,6 +12,12 @@ Entry format:
 
 ---
 
+## 2026-10-09 · claude · stack/m1/02-shader-view · #4
+- Done: `createUniforms`/`bindUniforms` (`src/engine/uniforms.ts`, in-place updates, typed `UniformBindingError`); `ShaderView` (R3F canvas, full-screen `RawShaderMaterial` in GLSL3, `uTime` from the clock, `uResolution` from the drawing buffer); `common/fullscreen.vert.glsl` and a `test` fragment shader; lazy engine demo on `/`; favicon.
+- Tests: `test/engine/uniforms.test.ts` (5 cases) and `e2e/shader-view.spec.ts` (canvas animates, no console errors), both committed red first.
+- Scope/decisions: the home-page demo is a placeholder until the M4 gallery. Playwright runs Chromium with SwiftShader (`--use-angle=swiftshader --enable-unsafe-swiftshader`), as the golden tests in DESIGN.md section 10 will need. The lazy three chunk is 242 KB gzipped; initial JS stays at 70 KB.
+- Next: `shaders:check` (#5).
+
 ## 2026-10-09 · claude · stack/m1/01-clock · #3
 - Done: deterministic `Clock` (`src/engine/clock.ts`): tick clamped to `maxDelta`, pause/play, exact `step` and `setTime` for captures and goldens. Coverage gate (v8): repository at least 80% of lines, `src/engine` and `src/params` at least 90%; `.tsx` UI glue excluded.
 - Tests: `test/engine/clock.test.ts` (7 cases), committed red first; clock at 100% coverage.
