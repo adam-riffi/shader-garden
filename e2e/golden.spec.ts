@@ -1,9 +1,10 @@
-import { readdirSync } from "node:fs";
+import { existsSync, readdirSync } from "node:fs";
 import { expect, test } from "@playwright/test";
 
-// Every shader folder with metadata, the hidden test pattern included (an engine regression check).
+// Every shader folder with metadata (registry.test.ts keeps these equal to the registry), the
+// hidden test pattern included as an engine regression check.
 const names = readdirSync("src/shaders", { withFileTypes: true })
-  .filter((entry) => entry.isDirectory() && entry.name !== "common")
+  .filter((entry) => entry.isDirectory() && existsSync(`src/shaders/${entry.name}/meta.ts`))
   .map((entry) => entry.name);
 
 test.describe("golden screenshots (seed 1, t = 2 s, 512x512)", () => {
