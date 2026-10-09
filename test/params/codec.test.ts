@@ -50,6 +50,7 @@ describe("decode", () => {
     ["a non-numeric seed", "v=1&s=abc&p=HBR88qQA"],
     ["a seed above 32 bits", "v=1&s=4294967296&p=HBR88qQA"],
     ["characters outside base64url", "v=1&s=1&p=HB+8/qQ="],
+    ["a length no base64 string has", "v=1&s=1&p=HBR88"],
     ["a varint longer than 3 bytes", "v=1&s=1&p=_____w"],
     ["a colour cut short", "v=1&s=1&p=HBR8"],
   ])("returns defaults for %s", (_, search) => {
