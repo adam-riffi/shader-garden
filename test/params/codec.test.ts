@@ -30,7 +30,9 @@ describe("decode", () => {
   it("P2: every shareable URL is at most 200 characters", () => {
     fc.assert(
       fc.property(metaWithValuesArb, seedArb, ({ meta, values }, seed) => {
-        expect(`/s/${meta.name}?${encode(meta, seed, values)}`.length).toBeLessThanOrEqual(200);
+        // Measured with the longest name the schema allows.
+        const url = `/s/${"x".repeat(32)}?${encode(meta, seed, values)}`;
+        expect(url.length).toBeLessThanOrEqual(200);
       }),
     );
   });

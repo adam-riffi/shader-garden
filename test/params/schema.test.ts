@@ -37,8 +37,23 @@ describe("defineMeta", () => {
     ["duplicate names", [float, float]],
     ["a malformed colour", [{ name: "c", type: "color", default: "green" }]],
     ["more than 16 params", Array.from({ length: 17 }, (_, i) => ({ ...float, name: `p${i}` }))],
+    ["a max that is not on the step grid", [{ ...float, max: 1, step: 0.3, default: 0.3 }]],
+    ["a step with more than 6 decimals", [{ ...float, step: 1 / 3, default: 0 }]],
   ])("rejects %s", (_, params) => {
     expect(() => defineMeta({ ...base, params } as never)).toThrow();
+  });
+
+  it("rejects a shader name longer than 32 characters", () => {
+    expect(() => defineMeta({ ...base, name: "x".repeat(33), params: [float] } as never)).toThrow();
+  });
+
+  it.each([
+    ["a mistyped value", { a: "0.5" }],
+    ["an out-of-range value", { a: 3 }],
+  ])("rejects a preset with %s", (_, preset) => {
+    expect(() =>
+      defineMeta({ ...base, params: [float], presets: { P: preset } } as never),
+    ).toThrow();
   });
 
   it("rejects a preset naming an unknown param", () => {

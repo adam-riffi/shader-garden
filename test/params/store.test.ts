@@ -3,7 +3,7 @@ import { encode } from "../../src/params/codec";
 import { randomize } from "../../src/params/random";
 import { defaults } from "../../src/params/schema";
 import { createParamsStore } from "../../src/params/store";
-import { syncToUrl } from "../../src/params/urlSync";
+import { syncToUrl, withQuery } from "../../src/params/urlSync";
 import { meta } from "../../src/shaders/test/meta";
 
 describe("createParamsStore", () => {
@@ -16,6 +16,12 @@ describe("createParamsStore", () => {
   it("reports an unreadable link and starts from the defaults", () => {
     const state = createParamsStore(meta, "?v=99").getState();
     expect(state).toMatchObject({ seed: 1, values: defaults(meta), status: "unknown-version" });
+  });
+
+  it("clears an unreadable-link status once the user changes the view", () => {
+    const store = createParamsStore(meta, "?v=99");
+    store.getState().set("rings", 10);
+    expect(store.getState().status).toBe("ok");
   });
 
   it("quantizes every value it is given", () => {
@@ -70,5 +76,12 @@ describe("syncToUrl", () => {
     stop();
     vi.advanceTimersByTime(1000);
     expect(write).not.toHaveBeenCalled();
+  });
+});
+
+describe("withQuery", () => {
+  it("replaces the query and keeps the path and hash", () => {
+    expect(withQuery("/s/bloom?old=1#notes", "v=1&s=2&p=AA")).toBe("/s/bloom?v=1&s=2&p=AA#notes");
+    expect(withQuery("/", "v=1")).toBe("/?v=1");
   });
 });
