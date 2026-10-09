@@ -74,12 +74,10 @@ function valueArb(p: ParamDef): fc.Arbitrary<unknown> {
 
 /** A meta with any valid (in-range, correctly typed) values for it. */
 export const metaWithValuesArb = metaArb.chain((meta) =>
-  fc
-    .tuple(...meta.params.map(valueArb))
-    .map((values) => ({
-      meta,
-      values: Object.fromEntries(meta.params.map((p, i) => [p.name, values[i]])),
-    })),
+  fc.tuple(...meta.params.map(valueArb)).map((values) => ({
+    meta,
+    values: Object.fromEntries(meta.params.map((p, i) => [p.name, values[i]])),
+  })),
 );
 
 export const seedArb = fc.integer({ min: 0, max: 2 ** 32 - 1 });
