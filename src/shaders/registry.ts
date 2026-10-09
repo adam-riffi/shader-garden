@@ -1,4 +1,6 @@
 import type { ShaderMeta } from "../params/schema";
+import { meta as terrainMeta } from "./terrain/meta";
+import terrainFragment from "./terrain/terrain.frag.glsl";
 import { meta as testMeta } from "./test/meta";
 import testFragment from "./test/test.frag.glsl";
 
@@ -10,7 +12,10 @@ export interface ShaderEntry {
 }
 
 /** Every shader, in gallery order. */
-export const registry: ShaderEntry[] = [{ meta: testMeta, fragment: testFragment, hidden: true }];
+export const registry: ShaderEntry[] = [
+  { meta: terrainMeta, fragment: terrainFragment },
+  { meta: testMeta, fragment: testFragment, hidden: true },
+];
 
 export const gallery = registry.filter((entry) => !entry.hidden);
 
