@@ -4,7 +4,13 @@ import { bindUniforms, createUniforms, UniformBindingError } from "../../src/eng
 
 describe("createUniforms", () => {
   it("wraps scalars and maps tuples to three vectors", () => {
-    const u = createUniforms({ uWarp: 0.5, uOn: true, uA: [1, 2], uB: [1, 2, 3], uC: [1, 2, 3, 4] });
+    const u = createUniforms({
+      uWarp: 0.5,
+      uOn: true,
+      uA: [1, 2],
+      uB: [1, 2, 3],
+      uC: [1, 2, 3, 4],
+    });
     expect(u.uWarp?.value).toBe(0.5);
     expect(u.uOn?.value).toBe(true);
     expect(u.uA?.value).toEqual(new Vector2(1, 2));
