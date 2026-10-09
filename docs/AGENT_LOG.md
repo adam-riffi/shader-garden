@@ -12,6 +12,12 @@ Entry format:
 
 ---
 
+## 2026-10-09 · claude · stack/m3/02-terrain · #14
+- Done: `common/noise.glsl` (integer hash, value noise, 2D simplex, rotated-octave fBm, written for this project) and Terrain: smooth 3-octave warp fields fold a detailed fBm height field, lit by finite-difference hillshade, with optional anti-aliased contours. Params: warp, scale, octaves, contours, lowland, peaks. Presets: Highlands, Dunes, Archipelago.
+- Tests: `test/shaders/terrain.test.ts` (gallery entry, warp and octave params, presets), committed red first; `shaders:check` passes; golden from CI.
+- Scope/decisions: 3D simplex is left out until a shader needs it; Ink will use the curl of 2D noise. Tuned by eye: half-frequency warp fields, relief 0.2, default warp 0.6 so the demo's warp drag has range.
+- Next: Aurora (#15).
+
 ## 2026-10-09 · claude · stack/m3/01-shader-pages · #13
 - Done: `src/shaders/registry.ts` (gallery order, hidden `test`); react-router routes (`/` list, `/s/:name` `ShaderPage` with generated controls and URL sync, an unknown-shader message, a catch-all); capture mode `?t=<s>` (`src/engine/capture.ts`: frozen clock, full-viewport canvas, dpr 1, `frameloop="demand"`); `e2e/golden.spec.ts` (every shader folder at seed 1, t = 2, 512×512, 1% tolerance, Linux only) with baselines uploaded as a CI artifact; SPA rewrite in `vercel.json`. `EngineDemo` is gone and the e2e tests moved to `/s/test`.
 - Tests: registry consistency, `captureTime`, the routed App render, an unknown-shader e2e test, a deep-link `@smoke` test, and the goldens; committed red first.
