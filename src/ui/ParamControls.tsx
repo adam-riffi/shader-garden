@@ -3,7 +3,6 @@ import type { ParamsStore } from "../params/store";
 
 /**
  * One native input per param, generated from the shader's metadata (no per-shader UI code).
- * Deliberately unstyled: the M4 controls panel builds on it.
  */
 export function ParamControls({ store }: { store: ParamsStore }) {
   const meta = useStore(store, (s) => s.meta);
@@ -11,12 +10,16 @@ export function ParamControls({ store }: { store: ParamsStore }) {
   const set = useStore(store, (s) => s.set);
 
   return (
-    <form onSubmit={(event) => event.preventDefault()}>
+    <form
+      className="param-controls"
+      aria-label="Parameters"
+      onSubmit={(event) => event.preventDefault()}
+    >
       {meta.params.map((p) => {
         const id = `param-${p.name}`;
         const value = values[p.name];
         return (
-          <div key={p.name}>
+          <div className={`param-row param-${p.type}`} key={p.name}>
             <label htmlFor={id}>{p.label ?? p.name}</label>{" "}
             {p.type === "bool" ? (
               <input

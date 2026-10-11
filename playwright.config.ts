@@ -5,6 +5,8 @@ const baseURL = process.env.BASE_URL ?? "http://localhost:4173";
 
 export default defineConfig({
   testDir: "e2e",
+  // SwiftShader is CPU-bound; concurrent full-size simulations must not starve assertions.
+  workers: 2,
   forbidOnly: !!process.env.CI,
   reporter: process.env.CI ? [["list"], ["html", { open: "never" }]] : "list",
   use: {
