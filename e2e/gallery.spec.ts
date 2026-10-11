@@ -1,6 +1,8 @@
 import { expect, test } from "@playwright/test";
 
-test("J1: six live thumbnails use one GPU context and open their shaders @smoke", async ({ page }) => {
+test("J1: six live thumbnails use one GPU context and open their shaders @smoke", async ({
+  page,
+}) => {
   await page.setViewportSize({ width: 1440, height: 1800 });
   await page.addInitScript(() => {
     const original = HTMLCanvasElement.prototype.getContext;
@@ -23,7 +25,9 @@ test("J1: six live thumbnails use one GPU context and open their shaders @smoke"
     await expect(tile).toHaveAttribute("data-ready", "true");
     await expect(tile).toHaveAttribute("width", "256");
     const first = await tile.evaluate((node: HTMLCanvasElement) => node.toDataURL());
-    await expect.poll(() => tile.evaluate((node: HTMLCanvasElement) => node.toDataURL())).not.toBe(first);
+    await expect
+      .poll(() => tile.evaluate((node: HTMLCanvasElement) => node.toDataURL()))
+      .not.toBe(first);
   }
   await expect(page.locator("html")).toHaveAttribute("data-gpu-contexts", "1");
   await page.getByRole("link", { name: /Explore Terrain/ }).click();
@@ -44,7 +48,9 @@ test("previews pause on request and while outside the viewport", async ({ page }
   expect(await tile.evaluate((node: HTMLCanvasElement) => node.toDataURL())).toBe(paused);
   await page.getByRole("button", { name: "Play previews" }).click();
   await tile.scrollIntoViewIfNeeded();
-  await expect.poll(() => tile.evaluate((node: HTMLCanvasElement) => node.toDataURL())).not.toBe(paused);
+  await expect
+    .poll(() => tile.evaluate((node: HTMLCanvasElement) => node.toDataURL()))
+    .not.toBe(paused);
   await page.evaluate(() => {
     const spacer = document.createElement("div");
     spacer.style.height = "2000px";
