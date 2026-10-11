@@ -12,6 +12,12 @@ Entry format:
 
 ---
 
+## 2026-10-12 · codex · stack/m4/01-live-gallery · #20
+- Done: six 256 px thumbnails share one renderer, run at most 15 fps, pause offscreen or on request, and dispose GPU resources. Editorial gallery content and reduced-motion default. Redeployed main (2581eee) to production.
+- Tests: gallery tests committed red (zero canvases); pnpm check green: 133 unit/property tests, 11 programs, 14 e2e passed, seven Linux-only goldens skipped. Production smoke 2/2; all six capture-ready routes returned 200 without errors.
+- Scope/decisions: DESIGN M4 and section 6 thumbnail constraints; performance tuning stays in M5. React review checklist applied.
+- Next: controls, source, visual identity and accessibility; independent review at stack completion.
+
 ## 2026-10-09 · claude · stack/m3/07-ink · #19
 - Done: Ink: semi-Lagrangian advection of a dye texture by the curl of a time-shifted simplex potential (divergence-free, no pressure solve), with fading, two circling emitters and marbled seeding. `SimulationPlane` now gives step passes `uSimTime` (simulated seconds counted in steps) and `uStepDt`, so live runs and capture replays share the same animated flow. Params: curl scale, flow, fade, two dyes. Presets: Marble, Smoke.
 - Tests: `test/shaders/ink.test.ts` (gallery simulation within 512 px; curl, flow and fade params; presets), committed red first; `shaders:check` passes for ink, seed and sim; golden from CI.
