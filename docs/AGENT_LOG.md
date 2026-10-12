@@ -12,6 +12,12 @@ Entry format:
 
 ---
 
+## 2026-10-12 · codex · stack/m4/03-source · #22
+- Done: Source/S opens a lazy Shiki viewer with a GLSL-only grammar, one theme and the JavaScript regex engine. Display, simulation, seed and vertex passes are selectable; expanded includes match GPU input. Highlight failure preserves plain source.
+- Tests: two browser cases committed red first; pnpm check green (133 unit/property, 11 programs, 20 e2e, seven Linux-only goldens skipped). Source module absent before opening; form keys and parameter values preserved.
+- Scope/decisions: Shiki 4.5.0 is allowed by DESIGN section 6; no WASM CSP exception. The J2 pixel check uses 640×480 to test behavior independently of the M5 1080p performance target.
+- Next: gallery identity, shader studio styling and accessibility evidence.
+
 ## 2026-10-12 · codex · stack/m4/02-controls · #21
 - Done: generated presets with active state, Randomize, pause/play, R/Space shortcuts, immediate Copy link and selectable clipboard-denial fallback. Controls prepare the glass layout.
 - Tests: four e2e cases committed red before implementation; pnpm check green (133 unit/property, 11 programs, 18 e2e; seven Linux-only goldens skipped). J2 checks pixels and URL; J3 reads the clipboard and opens a fresh page before any debounce assumption.

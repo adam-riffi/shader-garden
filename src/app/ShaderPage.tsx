@@ -9,6 +9,7 @@ import { createParamsStore } from "../params/store";
 import { syncToUrl, withQuery } from "../params/urlSync";
 import { findShader, type ShaderEntry } from "../shaders/registry";
 import { ControlsPanel } from "../ui/ControlsPanel";
+import { SourcePanel } from "../ui/SourcePanel";
 
 const NOTICES = {
   "unknown-version": "This link comes from a newer version of Shader Garden; showing the defaults.",
@@ -100,6 +101,7 @@ function ShaderScreen({ entry }: { entry: ShaderEntry }) {
         clock={clock}
         onSeed={simulation ? () => setReseed((count) => count + 1) : undefined}
       />
+      <SourcePanel entry={entry} />
     </div>
   );
 }
