@@ -12,6 +12,12 @@ Entry format:
 
 ---
 
+## 2026-10-12 · codex · stack/m4/04-identity · #23
+- Done: night-garden palette, self-hosted Instrument Serif/IBM Plex Mono (OFL licenses included), numbered borderless gallery, editorial header/footer, responsive grid and keyboard skip link.
+- Tests: skip navigation committed red first; reduced-motion mobile coverage; pnpm check green (133 unit/property, 11 programs, 22 e2e, seven Linux goldens skipped). Desktop 1440 px and mobile 390 px screenshots visually inspected; lint clean.
+- Scope/decisions: gallery and studio styling split to keep review small. No external font requests or CSP changes. Existing CI pixel-check flakiness is under investigation before readiness.
+- Next: full-bleed studio layout, accessibility audits and independent review.
+
 ## 2026-10-12 · codex · stack/m4/03-source · #22
 - Done: Source/S opens a lazy Shiki viewer with a GLSL-only grammar, one theme and the JavaScript regex engine. Display, simulation, seed and vertex passes are selectable; expanded includes match GPU input. Highlight failure preserves plain source.
 - Tests: two browser cases committed red first; pnpm check green (133 unit/property, 11 programs, 20 e2e, seven Linux-only goldens skipped). Source module absent before opening; form keys and parameter values preserved.
