@@ -59,6 +59,8 @@ test("clipboard denial exposes a selectable link", async ({ page }) => {
 });
 
 test("J2: slider changes both URL and pixels @smoke", async ({ page }) => {
+  // Keep the pixel assertion affordable on software WebGL; 1080p performance is M5.
+  await page.setViewportSize({ width: 640, height: 480 });
   await page.goto("/s/terrain");
   await page.getByRole("button", { name: "Pause", exact: true }).click();
   const canvas = page.locator("canvas");
