@@ -13,9 +13,11 @@ Colours and fonts follow DESIGN.md section 7. No shader algorithms change.
    keyboard R / Space, generated parameter layout.
 3. `stack/m4/03-source`: lazy Shiki GLSL viewer and S shortcut, including
    simulation passes and shared source.
-4. `stack/m4/04-identity`: night-garden typography, gallery composition, glass
-   panel, responsive layout and reduced-motion support.
-5. `stack/m4/05-verification`: accessibility evidence, complete journeys,
+4. `stack/m4/04-identity`: night-garden typography, gallery composition and
+   responsive layout. Self-host the specified fonts with their licenses.
+5. `stack/m4/05-studio`: full-bleed shader view, glass panel and source layout.
+   Splitting the visual pass keeps each stylesheet review near the 400-line limit.
+6. `stack/m4/06-verification`: accessibility evidence, complete journeys,
    independent review fixes, README and session handoff.
 
 ## Verification
