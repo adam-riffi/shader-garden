@@ -12,6 +12,12 @@ Entry format:
 
 ---
 
+## 2026-10-12 · codex · stack/m4/02-controls · #21
+- Done: generated presets with active state, Randomize, pause/play, R/Space shortcuts, immediate Copy link and selectable clipboard-denial fallback. Controls prepare the glass layout.
+- Tests: four e2e cases committed red before implementation; pnpm check green (133 unit/property, 11 programs, 18 e2e; seven Linux-only goldens skipped). J2 checks pixels and URL; J3 reads the clipboard and opens a fresh page before any debounce assumption.
+- Scope/decisions: Playwright capped at two workers after eight concurrent SwiftShader browsers starved pixel checks; no assertion or timeout relaxed. Copy shares seed/parameters, not elapsed simulation state.
+- Next: lazy GLSL source viewer, then theme and accessibility verification.
+
 ## 2026-10-12 · codex · stack/m4/01-live-gallery · #20
 - Done: six 256 px thumbnails share one renderer, run at most 15 fps, pause offscreen or on request, and dispose GPU resources. Editorial gallery content and reduced-motion default. Redeployed main (2581eee) to production.
 - Tests: gallery tests committed red (zero canvases); pnpm check green: 133 unit/property tests, 11 programs, 14 e2e passed, seven Linux-only goldens skipped. Production smoke 2/2; all six capture-ready routes returned 200 without errors.

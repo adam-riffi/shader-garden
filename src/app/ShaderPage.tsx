@@ -8,7 +8,7 @@ import { toUniforms } from "../params/schema";
 import { createParamsStore } from "../params/store";
 import { syncToUrl, withQuery } from "../params/urlSync";
 import { findShader, type ShaderEntry } from "../shaders/registry";
-import { ParamControls } from "../ui/ParamControls";
+import { ControlsPanel } from "../ui/ControlsPanel";
 
 const NOTICES = {
   "unknown-version": "This link comes from a newer version of Shader Garden; showing the defaults.",
@@ -34,7 +34,15 @@ function ShaderScreen({ entry }: { entry: ShaderEntry }) {
   const [reseed, setReseed] = useState(0);
   const [frozenAt] = useState(() => captureTime(window.location.search));
   const capture = frozenAt !== undefined;
-  const [clock] = useState(() => createClock(capture ? { time: frozenAt, paused: true } : {}));
+  const [clock] = useState(() =>
+    createClock(
+      capture
+        ? { time: frozenAt, paused: true }
+        : {
+            paused: window.matchMedia("(prefers-reduced-motion: reduce)").matches,
+          },
+    ),
+  );
   const [store] = useState(() => createParamsStore(meta, window.location.search));
   // Layout effect: subscribed before the controls can be used, so no early change is missed.
   useLayoutEffect(() => {
@@ -68,10 +76,17 @@ function ShaderScreen({ entry }: { entry: ShaderEntry }) {
   }
   const notice = status === "unknown-version" || status === "invalid" ? NOTICES[status] : null;
   return (
-    <>
-      <h2>{meta.title}</h2>
-      {notice && <p role="status">{notice}</p>}
-      <div style={{ height: "60vh" }}>
+    <div className="shader-page">
+      <div className="shader-heading">
+        <Link to="/">← All specimens</Link>
+        <h2>{meta.title}</h2>
+      </div>
+      {notice && (
+        <p className="link-notice" role="status">
+          {notice}
+        </p>
+      )}
+      <div className="shader-canvas" style={{ height: "60vh" }}>
         <ShaderView
           fragmentShader={fragment}
           uniforms={uniforms}
@@ -80,12 +95,11 @@ function ShaderScreen({ entry }: { entry: ShaderEntry }) {
           reseed={reseed}
         />
       </div>
-      {simulation && (
-        <button type="button" onClick={() => setReseed((count) => count + 1)}>
-          Seed
-        </button>
-      )}
-      <ParamControls store={store} />
-    </>
+      <ControlsPanel
+        store={store}
+        clock={clock}
+        onSeed={simulation ? () => setReseed((count) => count + 1) : undefined}
+      />
+    </div>
   );
 }
