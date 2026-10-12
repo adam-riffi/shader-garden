@@ -1,0 +1,357 @@
+@font-face {
+  font-family: "Instrument Serif";
+  src: url("/fonts/instrument-serif-regular.woff2") format("woff2");
+  font-display: swap;
+}
+@font-face {
+  font-family: "Instrument Serif";
+  font-style: italic;
+  src: url("/fonts/instrument-serif-italic.woff2") format("woff2");
+  font-display: swap;
+}
+@font-face {
+  font-family: "IBM Plex Mono";
+  src: url("/fonts/plex-mono-regular.woff2") format("woff2");
+  font-display: swap;
+}
+@font-face {
+  font-family: "IBM Plex Mono";
+  font-weight: 500;
+  src: url("/fonts/plex-mono-medium.woff2") format("woff2");
+  font-display: swap;
+}
+:root {
+  color-scheme: dark;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 12px;
+  line-height: 1.6;
+  color: #e1e9dc;
+  background: #0b1210;
+  --accent: #7cf2a4;
+  --muted: #9aa99e;
+  --line: #293a31;
+  --serif: "Instrument Serif", Georgia, serif;
+}
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+}
+::selection {
+  background: #7cf2a4;
+  color: #0b1210;
+}
+a {
+  color: inherit;
+  text-decoration: none;
+}
+button,
+input,
+select {
+  font: inherit;
+}
+button,
+select {
+  cursor: pointer;
+  color: inherit;
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  padding: 9px 13px;
+}
+button:hover,
+select:hover {
+  border-color: var(--accent);
+}
+button[aria-pressed="true"] {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+button:disabled {
+  cursor: wait;
+}
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 5px;
+}
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+}
+h1,
+h2,
+h3 {
+  font-weight: 400;
+}
+.skip-link {
+  position: fixed;
+  top: 8px;
+  left: 8px;
+  z-index: 100;
+  padding: 12px 20px;
+  color: #0b1210;
+  background: var(--accent);
+  transform: translateY(-150%);
+}
+.skip-link:focus {
+  transform: none;
+}
+.site-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  margin: 0 4.5%;
+  padding: 25px 0;
+  border-bottom: 1px solid var(--line);
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+}
+.brand-mark {
+  color: var(--accent);
+  font-size: 32px;
+  line-height: 1;
+}
+.brand h1 {
+  font: 30px / 1 var(--serif);
+}
+.site-header nav {
+  display: flex;
+  gap: 34px;
+  color: var(--muted);
+  font-size: 11px;
+}
+.site-header a:hover {
+  color: var(--accent);
+}
+.site-header [aria-current="page"] {
+  color: var(--accent);
+}
+.gallery-page {
+  margin: 0 auto;
+  width: 91%;
+  max-width: 1600px;
+}
+.gallery-intro {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  align-items: end;
+  gap: 22px 6%;
+  padding: 62px 0 65px;
+}
+.eyebrow {
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 10px;
+}
+.gallery-intro > .eyebrow {
+  grid-column: 1 / -1;
+}
+.gallery-intro h2 {
+  font: clamp(62px, 6.7vw, 112px) / 0.96 var(--serif);
+  letter-spacing: -0.025em;
+}
+.gallery-intro em {
+  color: var(--accent);
+  font-weight: 400;
+}
+.intro-note {
+  justify-self: end;
+  padding-bottom: 5px;
+  color: var(--accent);
+}
+.intro-note p {
+  color: var(--muted);
+  margin-top: 20px;
+  font-size: 11px;
+  line-height: 1.9;
+}
+.live-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  margin-right: 10px;
+  background: var(--accent);
+  border-radius: 50%;
+}
+.collection-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid var(--line);
+  padding: 20px 0 24px;
+}
+.collection-heading h2 {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.collection-heading h2 span {
+  color: var(--muted);
+  margin-left: 14px;
+}
+.collection-heading button {
+  border: 0;
+  padding: 8px 0 8px 16px;
+  font-size: 10px;
+  color: var(--muted);
+}
+.collection-heading button:hover {
+  color: var(--accent);
+}
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 42px 24px;
+}
+.specimen {
+  display: block;
+  min-width: 0;
+}
+.specimen-art {
+  position: relative;
+  aspect-ratio: 1.35;
+  overflow: hidden;
+  background: #14221a;
+}
+.specimen-art canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 500ms;
+}
+.specimen:hover canvas {
+  transform: scale(1.035);
+}
+.specimen-enter {
+  position: absolute;
+  bottom: 15px;
+  right: 15px;
+  background: #0b1210e8;
+  color: var(--accent);
+  padding: 7px 12px;
+  opacity: 0;
+  transition: opacity 180ms;
+}
+.specimen:hover .specimen-enter,
+.specimen:focus-visible .specimen-enter {
+  opacity: 1;
+}
+.specimen-caption {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin-top: 17px;
+}
+.specimen-caption h3 {
+  font: 31px / 1.15 var(--serif);
+}
+.specimen-number {
+  color: var(--muted);
+  font-size: 10px;
+}
+.specimen-caption > :last-child {
+  margin-left: auto;
+  font-size: 19px;
+  color: var(--muted);
+}
+.specimen:hover h3,
+.specimen:hover .specimen-caption > :last-child {
+  color: var(--accent);
+}
+.specimen-technique {
+  margin-top: 7px;
+  margin-left: 26px;
+  color: var(--muted);
+  font-size: 10px;
+}
+.gallery-footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 64px;
+  padding: 24px 0 32px;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 10px;
+}
+.gallery-footer > :first-child {
+  font: italic 25px / 1 var(--serif);
+}
+.route-message {
+  padding: 60px 4.5%;
+}
+.route-message a {
+  color: var(--accent);
+  text-decoration: underline;
+}
+@media (min-width: 1800px) {
+  .site-header {
+    margin: 0 auto;
+    max-width: 1600px;
+  }
+}
+@media (max-width: 950px) {
+  .gallery-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .gallery-intro {
+    grid-template-columns: 1fr;
+    padding: 45px 0;
+  }
+  .intro-note {
+    justify-self: start;
+    margin-top: 10px;
+  }
+}
+@media (max-width: 560px) {
+  .site-header {
+    padding: 22px 0;
+    gap: 12px;
+  }
+  .brand h1 {
+    font-size: 25px;
+  }
+  .brand-mark {
+    font-size: 26px;
+  }
+  .site-header nav {
+    gap: 12px;
+    font-size: 10px;
+  }
+  .site-header .collection-nav {
+    display: none;
+  }
+  .gallery-intro {
+    padding-top: 38px;
+  }
+  .gallery-intro h2 {
+    font-size: 66px;
+  }
+  .gallery-grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+  .collection-heading h2 span {
+    display: block;
+    margin-left: 0;
+  }
+  .gallery-footer {
+    flex-direction: column;
+    margin-top: 40px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .specimen-art canvas,
+  .specimen-enter {
+    transition: none;
+  }
+}
